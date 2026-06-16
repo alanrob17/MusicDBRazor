@@ -1,0 +1,117 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+
+/* ── Site Navbar ───────────────────────────────────────────────────── */
+.site-navbar {
+    background: linear-gradient(135deg, #0f0c29, #1a1a2e, #16213e);
+    border-bottom: 2px solid rgba(102, 126, 234, 0.45);
+    box-shadow: 0 2px 20px rgba(102, 126, 234, 0.18);
+    padding: 0.6rem 0;
+}
+
+/* Brand */
+.site-navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    background: linear-gradient(90deg, #a78bfa, #667eea, #a78bfa);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 4s linear infinite;
+    text-decoration: none;
+}
+
+.site-navbar-brand:hover {
+    opacity: 0.9;
+    text-decoration: none;
+}
+
+.brand-icon {
+    -webkit-text-fill-color: initial;
+    background: none;
+    font-size: 1.2rem;
+}
+
+@keyframes shimmer {
+    0%   { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
+/* Nav links */
+.site-nav-link {
+    position: relative;
+    color: rgba(255, 255, 255, 0.78) !important;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.5rem 0.85rem !important;
+    transition: color 0.2s;
+}
+
+.site-nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0.85rem;
+    right: 0.85rem;
+    bottom: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #667eea, #a78bfa);
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+}
+
+.site-nav-link:hover,
+.site-nav-link.active {
+    color: #fff !important;
+}
+
+.site-nav-link:hover::after,
+.site-nav-link.active::after {
+    transform: scaleX(1);
+}
+
+/* Toggler */
+.site-navbar-toggler {
+    border-color: rgba(102, 126, 234, 0.5);
+}
+
+.site-navbar-toggler:focus {
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.35);
+}

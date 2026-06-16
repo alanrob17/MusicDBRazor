@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="MusicDB.Data/MusicDB.Data.csproj" />
+  <Project Path="MusicDB/MusicDB.csproj" />
+</Solution>

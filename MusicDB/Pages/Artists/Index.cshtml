@@ -1,0 +1,389 @@
+@page
+@model MusicDB.Pages.Artists.IndexModel
+
+@{
+    ViewData["Title"] = "Artists";
+
+    // Pagination window: 15 buttons at a time
+    const int windowSize = 15;
+    int totalPages  = Model.TotalPages;
+    int currentPage = Model.CurrentPage;
+
+    // Calculate the start of the current 15-page window
+    int windowStart = ((currentPage - 1) / windowSize) * windowSize + 1;
+    int windowEnd   = Math.Min(windowStart + windowSize - 1, totalPages);
+
+    int prevWindowPage = windowStart - 1;           // last page of the previous window
+    int nextWindowPage = windowEnd   + 1;           // first page of the next window
+}
+
+<style>
+    /* ── Page header ─────────────────────────────────────── */
+    .artists-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .artists-header h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin: 0;
+    }
+
+    .artists-header .record-count {
+        font-size: 0.85rem;
+        color: #6c757d;
+        font-weight: 500;
+    }
+
+    .btn-create {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: #fff;
+        border: none;
+        padding: 0.45rem 1.1rem;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: opacity 0.2s, transform 0.1s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .btn-create:hover {
+        opacity: 0.88;
+        transform: translateY(-1px);
+        color: #fff;
+        text-decoration: none;
+    }
+
+    /* ── Search Bar ──────────────────────────────────────── */
+    .search-container {
+        margin-bottom: 1.5rem;
+    }
+
+    .search-form {
+        display: flex;
+        gap: 0.75rem;
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .search-input-wrapper {
+        position: relative;
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 0.9rem;
+        color: #adb5bd;
+        font-size: 0.9rem;
+        pointer-events: none;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 0.55rem 2.2rem 0.55rem 2.2rem;
+        font-size: 0.9rem;
+        color: #212529;
+        background: #fff;
+        border: 1.5px solid #dee2e6;
+        border-radius: 7px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+    }
+
+    .clear-search-btn {
+        position: absolute;
+        right: 0.9rem;
+        color: #adb5bd;
+        font-size: 0.8rem;
+        text-decoration: none;
+        cursor: pointer;
+        transition: color 0.15s;
+    }
+
+    .clear-search-btn:hover {
+        color: #dc3545;
+        text-decoration: none;
+    }
+
+    .btn-search {
+        background: #e9ecef;
+        color: #495057;
+        font-size: 0.875rem;
+        font-weight: 600;
+        padding: 0.55rem 1.2rem;
+        border: 1.5px solid #dee2e6;
+        border-radius: 7px;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    .btn-search:hover {
+        background: #667eea;
+        color: #fff;
+        border-color: #667eea;
+    }
+
+    /* ── Table card ──────────────────────────────────────── */
+    .artists-card {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+
+    .artists-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+    }
+
+    .artists-table thead {
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        color: #fff;
+    }
+
+    .artists-table thead th {
+        padding: 0.85rem 1rem;
+        font-weight: 600;
+        font-size: 0.8rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        border: none;
+    }
+
+    .artists-table tbody tr {
+        border-bottom: 1px solid #f1f3f5;
+        transition: background 0.15s;
+    }
+
+    .artists-table tbody tr:last-child {
+        border-bottom: none;
+    }
+
+    .artists-table tbody tr:hover {
+        background: #f8f5ff;
+    }
+
+    .artists-table tbody tr:nth-child(even) {
+        background: #fafafa;
+    }
+
+    .artists-table tbody tr:nth-child(even):hover {
+        background: #f8f5ff;
+    }
+
+    .artists-table td {
+        padding: 0.75rem 1rem;
+        color: #343a40;
+        vertical-align: middle;
+    }
+
+    .td-name {
+        font-weight: 600;
+        color: #1a1a2e;
+    }
+
+    .td-bio {
+        color: #6c757d;
+        font-style: italic;
+        max-width: 280px;
+    }
+
+    .td-actions {
+        white-space: nowrap;
+        text-align: right;
+    }
+
+    .action-link {
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 0.25rem 0.6rem;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: background 0.15s, color 0.15s;
+        margin-left: 0.25rem;
+    }
+
+    .action-edit    { color: #667eea; }
+    .action-details { color: #20c997; }
+    .action-delete  { color: #e74c3c; }
+
+    .action-edit:hover    { background: #667eea; color: #fff; }
+    .action-details:hover { background: #20c997; color: #fff; }
+    .action-delete:hover  { background: #e74c3c; color: #fff; }
+
+    /* ── Pagination ──────────────────────────────────────── */
+    .pagination-bar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.3rem;
+        flex-wrap: wrap;
+        margin-top: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .page-btn {
+        min-width: 2.2rem;
+        height: 2.2rem;
+        padding: 0 0.5rem;
+        border-radius: 6px;
+        border: 1px solid #dee2e6;
+        background: #fff;
+        color: #495057;
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    .page-btn:hover {
+        background: #f0eeff;
+        border-color: #667eea;
+        color: #667eea;
+        text-decoration: none;
+    }
+
+    .page-btn.active {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-color: transparent;
+        color: #fff;
+        font-weight: 700;
+        pointer-events: none;
+    }
+
+    .page-btn.nav-btn {
+        font-weight: 700;
+        color: #667eea;
+        border-color: #667eea;
+        gap: 0.2rem;
+        padding: 0 0.75rem;
+    }
+
+    .page-btn.nav-btn:hover {
+        background: #667eea;
+        color: #fff;
+    }
+
+    .pagination-info {
+        font-size: 0.82rem;
+        color: #6c757d;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+</style>
+
+<div class="artists-header">
+    <div>
+        <h1>🎵 Artists</h1>
+        <span class="record-count">
+            @Model.TotalCount artist@(Model.TotalCount != 1 ? "s" : "") &nbsp;·&nbsp;
+            Page @currentPage of @totalPages
+        </span>
+    </div>
+    <a asp-page="Create" class="btn-create">
+        <span>＋</span> New Artist
+    </a>
+</div>
+
+<div class="search-container">
+    <form method="get" class="search-form">
+        <div class="search-input-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" name="SearchString" value="@Model.SearchString" class="search-input" placeholder="Search by artist name..." />
+            @if (!string.IsNullOrEmpty(Model.SearchString))
+            {
+                <a asp-page="./Index" class="clear-search-btn" title="Clear search">✖</a>
+            }
+        </div>
+        <button type="submit" class="btn-search">Search</button>
+    </form>
+</div>
+
+<div class="artists-card">
+    <table class="artists-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Biography</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Artist)
+            {
+                <tr>
+                    <td class="td-name">@item.Name</td>
+                    <td class="td-bio">
+                        @if (item.Biography != null)
+                        {
+                            @(item.Biography.Length > 60 ? item.Biography[..60] + "…" : item.Biography)
+                        }
+                    </td>
+                    <td class="td-actions">
+                        <a asp-page="./Edit"    asp-route-id="@item.ArtistId" class="action-link action-edit">Edit</a>
+                        <a asp-page="./Details" asp-route-id="@item.ArtistId" class="action-link action-details">Details</a>
+                        <a asp-page="./Delete"  asp-route-id="@item.ArtistId" class="action-link action-delete">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@* ── Pagination ──────────────────────────────────────────── *@
+@if (totalPages > 1)
+{
+    <p class="pagination-info">
+        Showing records @(((currentPage - 1) * MusicDB.Pages.Artists.IndexModel.PageSize) + 1)
+        – @(Math.Min(currentPage * MusicDB.Pages.Artists.IndexModel.PageSize, Model.TotalCount))
+        of @Model.TotalCount
+    </p>
+
+    <div class="pagination-bar">
+
+        @* ◀ Previous 15-page window *@
+        @if (windowStart > 1)
+        {
+            <a asp-page="./Index" asp-route-pageNumber="@prevWindowPage" asp-route-searchString="@Model.SearchString" class="page-btn nav-btn" title="Previous 15 pages">&#8249; Prev 15</a>
+        }
+
+        @* Numbered page buttons *@
+        @for (int p = windowStart; p <= windowEnd; p++)
+        {
+            <a asp-page="./Index"
+               asp-route-pageNumber="@p"
+               asp-route-searchString="@Model.SearchString"
+               class="page-btn @(p == currentPage ? "active" : "")">@p</a>
+        }
+
+        @* Next 15-page window ▶ *@
+        @if (windowEnd < totalPages)
+        {
+            <a asp-page="./Index" asp-route-pageNumber="@nextWindowPage" asp-route-searchString="@Model.SearchString" class="page-btn nav-btn" title="Next 15 pages">Next 15 &#8250;</a>
+        }
+
+    </div>
+}
