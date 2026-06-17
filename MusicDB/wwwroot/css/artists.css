@@ -1,0 +1,702 @@
+/* ============================================================
+   artists.css  –  Shared styles for all Artist Razor pages
+   (Index, Create, Edit, Details, Delete)
+   ============================================================ */
+
+
+/* ── Page header (Index) ─────────────────────────────────── */
+.artists-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.artists-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0;
+}
+
+.artists-header .record-count {
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.btn-create {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border: none;
+    padding: 0.45rem 1.1rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.1s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.btn-create:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+    color: #fff;
+    text-decoration: none;
+}
+
+
+/* ── Search Bar (Index) ──────────────────────────────────── */
+.search-container {
+    margin-bottom: 1.5rem;
+}
+
+.search-form {
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 600px;
+}
+
+.search-input-wrapper {
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 0.9rem;
+    color: #adb5bd;
+    font-size: 0.9rem;
+    pointer-events: none;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.55rem 2.2rem 0.55rem 2.2rem;
+    font-size: 0.9rem;
+    color: #212529;
+    background: #fff;
+    border: 1.5px solid #dee2e6;
+    border-radius: 7px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.clear-search-btn {
+    position: absolute;
+    right: 0.9rem;
+    color: #adb5bd;
+    font-size: 0.8rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.15s;
+}
+
+.clear-search-btn:hover {
+    color: #dc3545;
+    text-decoration: none;
+}
+
+.btn-search {
+    background: #e9ecef;
+    color: #495057;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.55rem 1.2rem;
+    border: 1.5px solid #dee2e6;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.btn-search:hover {
+    background: #667eea;
+    color: #fff;
+    border-color: #667eea;
+}
+
+
+/* ── Artists table card (Index) ──────────────────────────── */
+.artists-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.artists-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.artists-table thead {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #fff;
+}
+
+.artists-table thead th {
+    padding: 0.85rem 1rem;
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border: none;
+}
+
+.artists-table tbody tr {
+    border-bottom: 1px solid #f1f3f5;
+    transition: background 0.15s;
+}
+
+.artists-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.artists-table tbody tr:hover {
+    background: #f8f5ff;
+}
+
+.artists-table tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+.artists-table tbody tr:nth-child(even):hover {
+    background: #f8f5ff;
+}
+
+.artists-table td {
+    padding: 0.75rem 1rem;
+    color: #343a40;
+    vertical-align: middle;
+}
+
+.td-name {
+    font-weight: 600;
+    color: #1a1a2e;
+}
+
+.td-bio {
+    color: #6c757d;
+    font-style: italic;
+    max-width: 280px;
+}
+
+.td-actions {
+    white-space: nowrap;
+    text-align: right;
+}
+
+.action-link {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+    margin-left: 0.25rem;
+}
+
+.action-edit    { color: #667eea; }
+.action-details { color: #20c997; }
+.action-delete  { color: #e74c3c; }
+
+.action-edit:hover    { background: #667eea; color: #fff; }
+.action-details:hover { background: #20c997; color: #fff; }
+.action-delete:hover  { background: #e74c3c; color: #fff; }
+
+
+/* ── Pagination (Index) ──────────────────────────────────── */
+.pagination-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.page-btn {
+    min-width: 2.2rem;
+    height: 2.2rem;
+    padding: 0 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    background: #fff;
+    color: #495057;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.page-btn:hover {
+    background: #f0eeff;
+    border-color: #667eea;
+    color: #667eea;
+    text-decoration: none;
+}
+
+.page-btn.active {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-color: transparent;
+    color: #fff;
+    font-weight: 700;
+    pointer-events: none;
+}
+
+.page-btn.nav-btn {
+    font-weight: 700;
+    color: #667eea;
+    border-color: #667eea;
+    gap: 0.2rem;
+    padding: 0 0.75rem;
+}
+
+.page-btn.nav-btn:hover {
+    background: #667eea;
+    color: #fff;
+}
+
+.pagination-info {
+    font-size: 0.82rem;
+    color: #6c757d;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+
+/* ── Outer centering wrappers (Create / Edit / Details / Delete) ── */
+.form-wrapper,
+.details-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 1rem 3rem;
+}
+
+
+/* ── Card shell (Create / Edit / Details / Delete) ─────────────── */
+.form-card,
+.artist-card {
+    width: 100%;
+    max-width: 120ch;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 28px rgba(0, 0, 0, 0.10);
+    overflow: hidden;
+}
+
+
+/* ── Card header – default (Create / Edit / Details) ────────────── */
+.form-card-header,
+.artist-card-header {
+    background: linear-gradient(135deg, #0f0c29, #1a1a2e, #16213e);
+    padding: 2rem 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    border-bottom: 2px solid rgba(102, 126, 234, 0.4);
+}
+
+/* ── Card header – destructive variant (Delete) ─────────────────── */
+.artist-card-header.danger {
+    background: linear-gradient(135deg, #2b0b0b, #1f0505, #140202);
+    border-bottom-color: rgba(220, 53, 69, 0.4);
+}
+
+
+/* ── Avatar (Create / Edit / Details) ───────────────────────────── */
+.form-avatar,
+.artist-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+    letter-spacing: -0.02em;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.4);
+}
+
+/* ── Avatar – destructive variant (Delete) ───────────────────────── */
+.artist-avatar.danger {
+    background: linear-gradient(135deg, #dc3545, #bd2130);
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.4);
+}
+
+
+/* ── Header text (Create / Edit / Details / Delete) ─────────────── */
+.form-header-text h1,
+.artist-header-text h1 {
+    margin: 0 0 0.15rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+}
+
+.form-header-text .form-subtitle,
+.artist-header-text .artist-subtitle {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Details subtitle is italic */
+.artist-header-text .artist-subtitle.italic {
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+/* Delete subtitle styling */
+.artist-header-text .artist-subtitle.delete-warning {
+    color: #f8d7da;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-style: normal;
+}
+
+
+/* ── Card body (Create / Edit / Details / Delete) ─────────────── */
+.form-card-body,
+.artist-card-body {
+    padding: 2rem 2.5rem;
+}
+
+
+/* ── Validation summary (Create / Edit) ─────────────────────────── */
+.validation-summary {
+    background: #fff5f5;
+    border: 1px solid #feb2b2;
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.5rem;
+    color: #c53030;
+    font-size: 0.875rem;
+}
+
+
+/* ── Form field groups (Create / Edit) ──────────────────────────── */
+.field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.field-row.full-width {
+    grid-template-columns: 1fr;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.field-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #6c757d;
+}
+
+.field-input {
+    padding: 0.65rem 0.9rem;
+    border: 1.5px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #212529;
+    background: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.field-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.18);
+}
+
+.field-input.textarea-bio {
+    min-height: 220px;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.65;
+}
+
+.field-error {
+    font-size: 0.8rem;
+    color: #e74c3c;
+    margin-top: 0.1rem;
+}
+
+.field-divider {
+    border: none;
+    border-top: 1px solid #f1f3f5;
+    margin: 0.25rem 0 1.5rem;
+}
+
+.field-section-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #adb5bd;
+    margin-bottom: 1rem;
+}
+
+
+/* ── Detail grid (Details / Delete) ─────────────────────────────── */
+.detail-grid {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 0;
+}
+
+.detail-row {
+    display: contents;
+}
+
+.detail-label,
+.detail-value {
+    padding: 0.85rem 0;
+    border-bottom: 1px solid #f1f3f5;
+}
+
+.detail-row:last-child .detail-label,
+.detail-row:last-child .detail-value {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #6c757d;
+    padding-right: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 1rem;
+}
+
+.detail-value {
+    font-size: 0.95rem;
+    color: #212529;
+    line-height: 1.6;
+}
+
+.detail-value.biography {
+    color: #495057;
+    font-style: italic;
+    line-height: 1.75;
+}
+
+.detail-value.biography::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Inline biography images (Details) */
+.detail-value.biography img {
+    width: 200px !important;
+    height: 200px !important;
+    object-fit: cover;
+}
+
+.detail-value.biography img.float-left {
+    float: left;
+    margin-right: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.detail-value.biography img.float-right {
+    float: right;
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.detail-value.empty {
+    color: #adb5bd;
+    font-style: italic;
+}
+
+
+/* ── Delete confirmation banner ──────────────────────────────────── */
+.delete-prompt-banner {
+    background-color: #fff5f5;
+    border-left: 4px solid #e53e3e;
+    color: #c53030;
+    padding: 1rem 1.25rem;
+    border-radius: 6px;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+
+/* ── Card footer (Create / Edit / Details / Delete) ──────────────── */
+.form-card-footer,
+.artist-card-footer {
+    padding: 1.25rem 2.5rem;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Delete page wraps buttons in a <form> */
+.artist-card-footer form {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 0;
+}
+
+
+/* ── Action buttons (Create / Edit / Details / Delete) ───────────── */
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.55rem 1.3rem;
+    border-radius: 7px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-action:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-decoration: none;
+}
+
+/* Primary / Save / Create */
+.btn-primary-action {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+}
+
+.btn-primary-action:hover { color: #fff; }
+
+/* Delete */
+.btn-delete {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: #fff;
+}
+
+.btn-delete:hover { color: #fff; }
+
+/* Back / Cancel */
+.btn-back {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.btn-back:hover { color: #212529; }
+
+
+/* ── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+    .form-wrapper,
+    .details-wrapper {
+        padding: 1rem 0.5rem 2rem;
+    }
+
+    .form-card-header,
+    .artist-card-header {
+        padding: 1.5rem 1.25rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .form-card-body,
+    .artist-card-body {
+        padding: 1.25rem;
+    }
+
+    .field-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-label {
+        padding-bottom: 0.1rem;
+        border-bottom: none;
+    }
+
+    .detail-value {
+        padding-top: 0;
+    }
+
+    .form-card-footer,
+    .artist-card-footer {
+        padding: 1rem 1.25rem;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+    .form-card-header,
+    .artist-card-header {
+        padding: 1.75rem;
+    }
+
+    .form-card-body,
+    .artist-card-body {
+        padding: 1.75rem;
+    }
+
+    .detail-grid {
+        grid-template-columns: 130px 1fr;
+    }
+
+    .form-card-footer,
+    .artist-card-footer {
+        padding: 1.25rem 1.75rem;
+    }
+}

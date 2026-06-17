@@ -11,247 +11,15 @@
     if (initials.Length == 0) initials = artist.Name?.Length > 0 ? artist.Name[0].ToString() : "?";
 }
 
-<style>
-    /* ── Wrapper ──────────────────────────────────────────────────── */
-    .edit-wrapper {
-        display: flex;
-        justify-content: center;
-        padding: 2rem 1rem 3rem;
-    }
-
-    /* ── Card ────────────────────────────────────────────────────── */
-    .edit-card {
-        width: 100%;
-        max-width: 120ch;
-        background: #fff;
-        border-radius: 14px;
-        box-shadow: 0 4px 28px rgba(0, 0, 0, 0.10);
-        overflow: hidden;
-    }
-
-    /* ── Header ──────────────────────────────────────────────────── */
-    .edit-card-header {
-        background: linear-gradient(135deg, #0f0c29, #1a1a2e, #16213e);
-        padding: 2rem 2.5rem;
-        display: flex;
-        align-items: center;
-        gap: 1.5rem;
-        border-bottom: 2px solid rgba(102, 126, 234, 0.4);
-    }
-
-    .edit-avatar {
-        width: 72px;
-        height: 72px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.75rem;
-        font-weight: 800;
-        color: #fff;
-        flex-shrink: 0;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.4);
-    }
-
-    .edit-header-text h1 {
-        margin: 0 0 0.15rem;
-        font-size: 1.6rem;
-        font-weight: 700;
-        color: #fff;
-        line-height: 1.2;
-    }
-
-    .edit-header-text .edit-subtitle {
-        font-size: 0.875rem;
-        color: rgba(255, 255, 255, 0.5);
-    }
-
-    /* ── Form body ───────────────────────────────────────────────── */
-    .edit-card-body {
-        padding: 2rem 2.5rem;
-    }
-
-    .validation-summary {
-        background: #fff5f5;
-        border: 1px solid #feb2b2;
-        border-radius: 8px;
-        padding: 0.85rem 1rem;
-        margin-bottom: 1.5rem;
-        color: #c53030;
-        font-size: 0.875rem;
-    }
-
-    /* ── Field groups ────────────────────────────────────────────── */
-    .field-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1.25rem;
-        margin-bottom: 1.25rem;
-    }
-
-    .field-row.full-width {
-        grid-template-columns: 1fr;
-    }
-
-    .field-group {
-        display: flex;
-        flex-direction: column;
-        gap: 0.35rem;
-    }
-
-    .field-label {
-        font-size: 0.78rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.07em;
-        color: #6c757d;
-    }
-
-    .field-input {
-        padding: 0.65rem 0.9rem;
-        border: 1.5px solid #dee2e6;
-        border-radius: 8px;
-        font-size: 0.95rem;
-        color: #212529;
-        background: #fff;
-        transition: border-color 0.2s, box-shadow 0.2s;
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    .field-input:focus {
-        outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.18);
-    }
-
-    .field-input.textarea-bio {
-        min-height: 220px;
-        resize: vertical;
-        font-family: inherit;
-        line-height: 1.65;
-    }
-
-    .field-error {
-        font-size: 0.8rem;
-        color: #e74c3c;
-        margin-top: 0.1rem;
-    }
-
-    /* ── Divider ─────────────────────────────────────────────────── */
-    .field-divider {
-        border: none;
-        border-top: 1px solid #f1f3f5;
-        margin: 0.25rem 0 1.5rem;
-    }
-
-    .field-section-title {
-        font-size: 0.72rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: #adb5bd;
-        margin-bottom: 1rem;
-    }
-
-    /* ── Footer ──────────────────────────────────────────────────── */
-    .edit-card-footer {
-        padding: 1.25rem 2.5rem;
-        background: #f8f9fa;
-        border-top: 1px solid #e9ecef;
-        display: flex;
-        gap: 0.75rem;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .btn-action {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        padding: 0.55rem 1.3rem;
-        border-radius: 7px;
-        font-size: 0.875rem;
-        font-weight: 600;
-        text-decoration: none;
-        transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
-        cursor: pointer;
-        border: none;
-    }
-
-    .btn-action:hover {
-        opacity: 0.88;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        text-decoration: none;
-    }
-
-    .btn-save {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: #fff;
-    }
-
-    .btn-save:hover { color: #fff; }
-
-    .btn-back {
-        background: #e9ecef;
-        color: #495057;
-    }
-
-    .btn-back:hover { color: #212529; }
-
-    /* ── Responsive ──────────────────────────────────────────────── */
-    @@media (max-width: 600px) {
-        .edit-wrapper {
-            padding: 1rem 0.5rem 2rem;
-        }
-
-        .edit-card-header {
-            padding: 1.5rem 1.25rem;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-
-        .edit-card-body {
-            padding: 1.25rem;
-        }
-
-        .field-row {
-            grid-template-columns: 1fr;
-            gap: 1rem;
-        }
-
-        .edit-card-footer {
-            padding: 1rem 1.25rem;
-        }
-    }
-
-    @@media (min-width: 601px) and (max-width: 900px) {
-        .edit-card-header {
-            padding: 1.75rem;
-        }
-
-        .edit-card-body {
-            padding: 1.75rem;
-        }
-
-        .edit-card-footer {
-            padding: 1.25rem 1.75rem;
-        }
-    }
-</style>
-
-<div class="edit-wrapper">
-    <div class="edit-card">
+<div class="form-wrapper">
+    <div class="form-card">
 
         @* ── Header ── *@
-        <div class="edit-card-header">
-            <div class="edit-avatar">@initials</div>
-            <div class="edit-header-text">
+        <div class="form-card-header">
+            <div class="form-avatar">@initials</div>
+            <div class="form-header-text">
                 <h1>@(artist.Name ?? "Edit Artist")</h1>
-                <span class="edit-subtitle">✏️ Editing artist record</span>
+                <span class="form-subtitle">✏️ Editing artist record</span>
             </div>
         </div>
 
@@ -259,7 +27,7 @@
         <form method="post">
             <input type="hidden" asp-for="Artist.ArtistId" />
 
-            <div class="edit-card-body">
+            <div class="form-card-body">
 
                 @* Validation summary *@
                 <div asp-validation-summary="ModelOnly" class="validation-summary text-danger"></div>
@@ -319,8 +87,8 @@
             </div>
 
             @* ── Footer ── *@
-            <div class="edit-card-footer">
-                <button type="submit" class="btn-action btn-save">💾 Save Changes</button>
+            <div class="form-card-footer">
+                <button type="submit" class="btn-action btn-primary-action">💾 Save Changes</button>
                 <a asp-page="./Index" class="btn-action btn-back">← Back to Artists</a>
             </div>
         </form>
