@@ -1,0 +1,524 @@
+/* ============================================================
+   records.css  –  Shared styles for all Record Razor pages
+   (Index, Create, Edit, Details, Delete)
+   ============================================================ */
+
+
+/* ── Page header (Index) ─────────────────────────────────── */
+.records-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.records-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0;
+}
+
+.record-count {
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.btn-create {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border: none;
+    padding: 0.45rem 1.1rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.1s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.btn-create:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+    color: #fff;
+    text-decoration: none;
+}
+
+
+/* ── Search (Index) ──────────────────────────────────────── */
+.search-container { margin-bottom: 1.5rem; }
+
+.search-form { display: flex; gap: 0.75rem; max-width: 600px; }
+
+.search-input-wrapper {
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 0.9rem;
+    color: #adb5bd;
+    font-size: 0.9rem;
+    pointer-events: none;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.55rem 2.2rem 0.55rem 2.2rem;
+    font-size: 0.9rem;
+    color: #212529;
+    background: #fff;
+    border: 1.5px solid #dee2e6;
+    border-radius: 7px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.clear-search-btn {
+    position: absolute;
+    right: 0.9rem;
+    color: #adb5bd;
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.clear-search-btn:hover { color: #dc3545; text-decoration: none; }
+
+.btn-search {
+    background: #e9ecef;
+    color: #495057;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.55rem 1.2rem;
+    border: 1.5px solid #dee2e6;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.btn-search:hover { background: #667eea; color: #fff; border-color: #667eea; }
+
+
+/* ── Table (Index) ───────────────────────────────────────── */
+.records-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.records-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+
+.records-table thead { background: linear-gradient(135deg, #1a1a2e, #16213e); color: #fff; }
+
+.records-table thead th {
+    padding: 0.85rem 1rem;
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border: none;
+}
+
+.records-table tbody tr { border-bottom: 1px solid #f1f3f5; transition: background 0.15s; }
+.records-table tbody tr:last-child { border-bottom: none; }
+.records-table tbody tr:hover { background: #f8f5ff; }
+.records-table tbody tr:nth-child(even) { background: #fafafa; }
+.records-table tbody tr:nth-child(even):hover { background: #f8f5ff; }
+.records-table td { padding: 0.7rem 1rem; vertical-align: middle; }
+
+.td-artist  { font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+.td-name    { color: #212529; }
+.td-year    { text-align: center; color: #6c757d; font-size: 0.85rem; }
+.td-actions { white-space: nowrap; text-align: right; }
+
+.action-link {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-left: 0.3rem;
+    transition: opacity 0.15s, transform 0.1s;
+    display: inline-block;
+}
+
+.action-link:hover { opacity: 0.8; transform: translateY(-1px); text-decoration: none; }
+
+.action-edit    { background: #e8f4fd; color: #1a73e8; }
+.action-details { background: #e8f5e9; color: #2e7d32; }
+.action-delete  { background: #fce4ec; color: #c62828; }
+
+
+/* ── Pagination (Index) ──────────────────────────────────── */
+.pagination-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.2rem;
+    height: 2.2rem;
+    padding: 0 0.6rem;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1.5px solid #dee2e6;
+    color: #495057;
+    background: #fff;
+    transition: all 0.15s;
+}
+
+.page-btn:hover { background: #667eea; color: #fff; border-color: #667eea; text-decoration: none; }
+.page-btn.active { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; border-color: transparent; }
+.nav-btn { background: #f1f3f5; color: #495057; }
+.pagination-info { font-size: 0.82rem; color: #6c757d; text-align: center; margin-bottom: 0.5rem; }
+
+
+/* ── Shared card shell (Create, Edit, Details, Delete) ───── */
+.create-wrapper,
+.edit-wrapper,
+.details-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 1rem 3rem;
+}
+
+.create-card,
+.edit-card,
+.record-card {
+    width: 100%;
+    max-width: 120ch;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 28px rgba(0, 0, 0, 0.10);
+    overflow: hidden;
+}
+
+/* Card headers */
+.create-card-header,
+.edit-card-header,
+.record-card-header {
+    padding: 2rem 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* Default (blue-purple) header for Create, Edit, Details */
+.create-card-header,
+.edit-card-header,
+.record-card-header:not(.record-card-header--danger) {
+    background: linear-gradient(135deg, #0f0c29, #1a1a2e, #16213e);
+    border-bottom: 2px solid rgba(102, 126, 234, 0.4);
+}
+
+/* Danger (red) header for Delete */
+.record-card-header--danger {
+    background: linear-gradient(135deg, #2b0b0b, #1f0505, #140202);
+    border-bottom: 2px solid rgba(220, 53, 69, 0.4);
+}
+
+/* Avatars */
+.create-avatar,
+.edit-avatar,
+.record-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+/* Default (blue-purple) avatar */
+.create-avatar,
+.edit-avatar,
+.record-avatar:not(.record-avatar--danger) {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.4);
+}
+
+/* Danger (red) avatar for Delete */
+.record-avatar--danger {
+    background: linear-gradient(135deg, #dc3545, #bd2130);
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.4);
+}
+
+/* Header text */
+.create-header-text h1,
+.edit-header-text h1,
+.record-header-text h1 {
+    margin: 0 0 0.15rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+}
+
+.create-subtitle,
+.edit-subtitle {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.record-subtitle {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.55);
+    font-style: italic;
+}
+
+/* Danger subtitle override for Delete */
+.record-subtitle--danger {
+    color: #f8d7da;
+    font-style: normal;
+    font-weight: 500;
+}
+
+/* Card bodies */
+.create-card-body,
+.edit-card-body,
+.record-card-body { padding: 2rem 2.5rem; }
+
+/* Card footers */
+.create-card-footer,
+.edit-card-footer,
+.record-card-footer {
+    padding: 1.25rem 2.5rem;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+.create-card-footer,
+.edit-card-footer {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.record-card-footer form { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+
+
+/* ── Form fields (Create, Edit) ──────────────────────────── */
+.validation-summary {
+    background: #fff5f5;
+    border: 1px solid #feb2b2;
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.5rem;
+    color: #c53030;
+    font-size: 0.875rem;
+}
+
+.field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.field-row.full-width { grid-template-columns: 1fr; }
+
+.field-group { display: flex; flex-direction: column; gap: 0.35rem; }
+
+.field-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #6c757d;
+}
+
+.field-input {
+    padding: 0.65rem 0.9rem;
+    border: 1.5px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #212529;
+    background: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.field-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.18);
+}
+
+.field-input.textarea-review {
+    min-height: 180px;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.65;
+}
+
+.field-error { font-size: 0.8rem; color: #e74c3c; margin-top: 0.1rem; }
+
+.field-divider { border: none; border-top: 1px solid #f1f3f5; margin: 0.25rem 0 1.5rem; }
+
+.field-section-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #adb5bd;
+    margin-bottom: 1rem;
+}
+
+
+/* ── Detail grid (Details, Delete) ──────────────────────── */
+.detail-grid { display: grid; grid-template-columns: 180px 1fr; gap: 0; }
+.detail-row  { display: contents; }
+
+.detail-label,
+.detail-value {
+    padding: 0.85rem 0;
+    border-bottom: 1px solid #f1f3f5;
+}
+
+.detail-row:last-child .detail-label,
+.detail-row:last-child .detail-value { border-bottom: none; }
+
+.detail-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #6c757d;
+    padding-right: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 1rem;
+}
+
+.detail-value { font-size: 0.95rem; color: #212529; line-height: 1.6; }
+.detail-value.empty { color: #adb5bd; font-style: italic; }
+
+
+/* ── Delete prompt banner ────────────────────────────────── */
+.delete-prompt-banner {
+    background-color: #fff5f5;
+    border-left: 4px solid #e53e3e;
+    color: #c53030;
+    padding: 1rem 1.25rem;
+    border-radius: 6px;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+
+/* ── Action buttons (Create, Edit, Details, Delete) ──────── */
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: 7px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-action:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Save button (on Edit page footer) */
+.btn-save { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
+.btn-save:hover { color: #fff; }
+
+/* Edit button (on Details page footer) */
+.btn-edit { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
+.btn-edit:hover { color: #fff; }
+
+/* Delete confirm button */
+.btn-delete { background: linear-gradient(135deg, #dc3545, #c82333); color: #fff; }
+.btn-delete:hover { color: #fff; }
+
+/* Back / Cancel button */
+.btn-back { background: #e9ecef; color: #495057; }
+.btn-back:hover { color: #212529; }
+
+
+/* ── Responsive breakpoints ──────────────────────────────── */
+@media (max-width: 600px) {
+    .create-wrapper,
+    .edit-wrapper,
+    .details-wrapper { padding: 1rem 0.5rem 2rem; }
+
+    .create-card-header,
+    .edit-card-header,
+    .record-card-header {
+        padding: 1.5rem 1.25rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .create-card-body,
+    .edit-card-body,
+    .record-card-body { padding: 1.25rem; }
+
+    .field-row { grid-template-columns: 1fr; gap: 1rem; }
+
+    .detail-grid { grid-template-columns: 1fr; }
+    .detail-label { padding-bottom: 0.1rem; border-bottom: none; }
+    .detail-value { padding-top: 0; }
+
+    .create-card-footer,
+    .edit-card-footer,
+    .record-card-footer { padding: 1rem 1.25rem; }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+    .create-card-header,
+    .edit-card-header,
+    .record-card-header { padding: 1.75rem; }
+
+    .create-card-body,
+    .edit-card-body,
+    .record-card-body { padding: 1.75rem; }
+
+    .detail-grid { grid-template-columns: 140px 1fr; }
+
+    .create-card-footer,
+    .edit-card-footer,
+    .record-card-footer { padding: 1.25rem 1.75rem; }
+}
