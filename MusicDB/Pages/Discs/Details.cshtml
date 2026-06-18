@@ -1,0 +1,64 @@
+@page
+@model MusicDB.Pages.Discs.DetailsModel
+
+@{
+    ViewData["Title"] = (Model.Disc.Name ?? "Disc") + " — Details";
+    var disc = Model.Disc;
+    string durationDisplay = disc.Duration.HasValue
+        ? disc.Duration.Value.ToString(@"hh\:mm\:ss")
+        : "—";
+}
+
+
+
+<div class="disc-details-wrapper">
+    <div class="disc-card">
+        <div class="disc-card-header">
+            <div class="disc-avatar">💿</div>
+            <div class="disc-header-text">
+                <h1>@(disc.Name ?? "Unknown Disc")</h1>
+                <span class="disc-subtitle">@(disc.Record?.Name ?? "Unknown Record")@(disc.DiscNumber.HasValue ? " · Disc " + disc.DiscNumber : "")</span>
+            </div>
+        </div>
+
+        <div class="disc-card-body">
+            <div class="disc-detail-grid">
+
+                <div class="disc-detail-row">
+                    <span class="disc-detail-label">Record</span>
+                    <span class="disc-detail-value">@(disc.Record?.Name ?? "—")</span>
+                </div>
+                <div class="disc-detail-row">
+                    <span class="disc-detail-label">Name</span>
+                    <span class="disc-detail-value">@(disc.Name ?? "—")</span>
+                </div>
+                <div class="disc-detail-row">
+                    <span class="disc-detail-label">Sub Title</span>
+                    <span class="disc-detail-value @(string.IsNullOrWhiteSpace(disc.SubTitle) ? "empty" : "")">@(string.IsNullOrWhiteSpace(disc.SubTitle) ? "—" : disc.SubTitle)</span>
+                </div>
+                <div class="disc-detail-row">
+                    <span class="disc-detail-label">Disc Number</span>
+                    <span class="disc-detail-value @(disc.DiscNumber == null ? "empty" : "")">@(disc.DiscNumber?.ToString() ?? "—")</span>
+                </div>
+                <div class="disc-detail-row">
+                    <span class="disc-detail-label">Length</span>
+                    <span class="disc-detail-value @(string.IsNullOrWhiteSpace(disc.Length) ? "empty" : "")">@(string.IsNullOrWhiteSpace(disc.Length) ? "—" : disc.Length)</span>
+                </div>
+                <div class="disc-detail-row">
+                    <span class="disc-detail-label">Duration</span>
+                    <span class="disc-detail-value @(!disc.Duration.HasValue ? "empty" : "")">@durationDisplay</span>
+                </div>
+                <div class="disc-detail-row">
+                    <span class="disc-detail-label">Folder</span>
+                    <span class="disc-detail-value @(string.IsNullOrWhiteSpace(disc.Folder) ? "empty" : "")">@(string.IsNullOrWhiteSpace(disc.Folder) ? "—" : disc.Folder)</span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="disc-card-footer">
+            <a asp-page="./Edit" asp-route-id="@disc.DiscId" class="disc-btn-action disc-btn-edit">✏️ Edit</a>
+            <a asp-page="./Index" class="disc-btn-action disc-btn-back">← Back to Discs</a>
+        </div>
+    </div>
+</div>

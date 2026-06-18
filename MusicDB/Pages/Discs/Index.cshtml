@@ -1,0 +1,116 @@
+@page
+@model MusicDB.Pages.Discs.IndexModel
+
+@{
+    ViewData["Title"] = "Discs";
+
+    const int windowSize = 15;
+    int totalPages  = Model.TotalPages;
+    int currentPage = Model.CurrentPage;
+    int windowStart = ((currentPage - 1) / windowSize) * windowSize + 1;
+    int windowEnd   = Math.Min(windowStart + windowSize - 1, totalPages);
+    int prevWindowPage = windowStart - 1;
+    int nextWindowPage = windowEnd   + 1;
+}
+
+
+
+<div class="discs-header">
+    <div>
+        @if (!string.IsNullOrWhiteSpace(Model.SearchString) && Model.MatchedRecordName != null)
+        {
+            <h1>💿 @Model.MatchedRecordName</h1>
+            <span class="disc-count">
+                @Model.TotalCount disc@(Model.TotalCount != 1 ? "s" : "") &nbsp;·&nbsp;
+                Page @currentPage of @totalPages
+            </span>
+        }
+        else if (!string.IsNullOrWhiteSpace(Model.SearchString) && Model.TotalCount == 0)
+        {
+            <h1>💿 No record found</h1>
+            <span class="disc-count">No discs matched "@Model.SearchString"</span>
+        }
+        else
+        {
+            <h1>💿 Discs</h1>
+            <span class="disc-count">
+                @Model.TotalCount disc@(Model.TotalCount != 1 ? "s" : "") &nbsp;·&nbsp;
+                Page @currentPage of @totalPages
+            </span>
+        }
+    </div>
+    <a asp-page="Create" class="disc-btn-create">
+        <span>＋</span> New Disc
+    </a>
+</div>
+
+<div class="disc-search-container">
+    <form method="get" class="disc-search-form">
+        <div class="disc-search-input-wrapper">
+            <span class="disc-search-icon">🔍</span>
+            <input type="text" name="SearchString" value="@Model.SearchString" class="disc-search-input" placeholder="Search by record name..." />
+            @if (!string.IsNullOrEmpty(Model.SearchString))
+            {
+                <a asp-page="./Index" class="disc-clear-search-btn" title="Clear search">✖</a>
+            }
+        </div>
+        <button type="submit" class="disc-btn-search">Search</button>
+    </form>
+</div>
+
+<div class="discs-card">
+    <table class="discs-table">
+        <thead>
+            <tr>
+                <th>Record</th>
+                <th>Disc Name</th>
+                <th>Disc #</th>
+                <th>Length</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Disc)
+            {
+                <tr>
+                    <td class="disc-td-record">@item.Record?.Name</td>
+                    <td class="disc-td-name">@item.Name</td>
+                    <td class="disc-td-number">@item.DiscNumber</td>
+                    <td class="disc-td-length">@item.Length</td>
+                    <td class="disc-td-actions">
+                        <a asp-page="./Edit"    asp-route-id="@item.DiscId" class="disc-action-link disc-action-edit">Edit</a>
+                        <a asp-page="./Details" asp-route-id="@item.DiscId" class="disc-action-link disc-action-details">Details</a>
+                        <a asp-page="./Delete"  asp-route-id="@item.DiscId" class="disc-action-link disc-action-delete">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (totalPages > 1)
+{
+    <p class="disc-pagination-info">
+        Showing discs @(((currentPage - 1) * MusicDB.Pages.Discs.IndexModel.PageSize) + 1)
+        – @(Math.Min(currentPage * MusicDB.Pages.Discs.IndexModel.PageSize, Model.TotalCount))
+        of @Model.TotalCount
+    </p>
+
+    <div class="disc-pagination-bar">
+        @if (windowStart > 1)
+        {
+            <a asp-page="./Index" asp-route-pageNumber="@prevWindowPage" asp-route-searchString="@Model.SearchString" class="disc-page-btn disc-nav-btn">&#8249; Prev 15</a>
+        }
+        @for (int p = windowStart; p <= windowEnd; p++)
+        {
+            <a asp-page="./Index"
+               asp-route-pageNumber="@p"
+               asp-route-searchString="@Model.SearchString"
+               class="disc-page-btn @(p == currentPage ? "active" : "")">@p</a>
+        }
+        @if (windowEnd < totalPages)
+        {
+            <a asp-page="./Index" asp-route-pageNumber="@nextWindowPage" asp-route-searchString="@Model.SearchString" class="disc-page-btn disc-nav-btn">Next 15 &#8250;</a>
+        }
+    </div>
+}

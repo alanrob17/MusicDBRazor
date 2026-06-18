@@ -1,0 +1,97 @@
+@page
+@model MusicDB.Pages.Discs.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete Disc — " + Model.Disc.Name;
+    var disc = Model.Disc;
+    string durationDisplay = disc.Duration.HasValue
+        ? disc.Duration.Value.ToString(@"hh\:mm\:ss")
+        : "—";
+}
+
+<div class="disc-details-wrapper">
+    <div class="disc-card">
+
+        @* Header *@
+        <div class="disc-card-header danger">
+            <div class="disc-avatar danger">🗑️</div>
+            <div class="disc-header-text">
+                <h1>Delete @(disc.Name ?? "Disc")?</h1>
+                <span class="disc-subtitle delete-warning">
+                    ⚠️ Warning: This action is permanent and cannot be undone.
+                </span>
+            </div>
+        </div>
+
+        @* Body *@
+        <div class="disc-card-body">
+
+            <div class="disc-delete-prompt-banner">
+                <span>Are you sure you want to permanently delete this disc from the database?</span>
+            </div>
+
+            <div class="disc-detail-grid">
+
+                <div class="disc-detail-row">
+                    <span class="disc-detail-label">Record</span>
+                    <span class="disc-detail-value">@(disc.Record?.Name ?? "—")</span>
+                </div>
+
+                <div class="disc-detail-row">
+                    <span class="disc-detail-label">Name</span>
+                    <span class="disc-detail-value">@(disc.Name ?? "—")</span>
+                </div>
+
+                <div class="disc-detail-row">
+                    <span class="disc-detail-label">Sub Title</span>
+                    <span class="disc-detail-value @(string.IsNullOrWhiteSpace(disc.SubTitle) ? "empty" : "")">
+                        @(string.IsNullOrWhiteSpace(disc.SubTitle) ? "—" : disc.SubTitle)
+                    </span>
+                </div>
+
+                <div class="disc-detail-row">
+                    <span class="disc-detail-label">Disc Number</span>
+                    <span class="disc-detail-value @(disc.DiscNumber == null ? "empty" : "")">
+                        @(disc.DiscNumber?.ToString() ?? "—")
+                    </span>
+                </div>
+
+                <div class="disc-detail-row">
+                    <span class="disc-detail-label">Length</span>
+                    <span class="disc-detail-value @(string.IsNullOrWhiteSpace(disc.Length) ? "empty" : "")">
+                        @(string.IsNullOrWhiteSpace(disc.Length) ? "—" : disc.Length)
+                    </span>
+                </div>
+
+                <div class="disc-detail-row">
+                    <span class="disc-detail-label">Duration</span>
+                    <span class="disc-detail-value @(!disc.Duration.HasValue ? "empty" : "")">
+                        @durationDisplay
+                    </span>
+                </div>
+
+                <div class="disc-detail-row">
+                    <span class="disc-detail-label">Folder</span>
+                    <span class="disc-detail-value @(string.IsNullOrWhiteSpace(disc.Folder) ? "empty" : "")">
+                        @(string.IsNullOrWhiteSpace(disc.Folder) ? "—" : disc.Folder)
+                    </span>
+                </div>
+
+            </div>
+        </div>
+
+        @* Footer *@
+        <div class="disc-card-footer">
+            <form method="post">
+                <input type="hidden" asp-for="Disc.DiscId" />
+                <button type="submit" class="disc-btn-action disc-btn-delete">
+                    🗑️ Confirm Delete
+                </button>
+                <a asp-page="./Index" class="disc-btn-action disc-btn-back">
+                    Cancel
+                </a>
+            </form>
+        </div>
+
+    </div>
+</div>

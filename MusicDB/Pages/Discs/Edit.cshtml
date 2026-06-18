@@ -1,0 +1,89 @@
+@page
+@model MusicDB.Pages.Discs.EditModel
+
+@{
+    ViewData["Title"] = "Edit — " + (Model.Disc.Name ?? "Disc");
+    var disc = Model.Disc;
+}
+
+<div class="disc-edit-wrapper">
+    <div class="disc-edit-card">
+        <div class="disc-edit-card-header">
+            <div class="disc-edit-avatar">✏️</div>
+            <div class="disc-edit-header-text">
+                <h1>@(disc.Name ?? "Edit Disc")</h1>
+                <span class="disc-edit-subtitle">💿 Editing disc record</span>
+            </div>
+        </div>
+
+        <form method="post">
+            <input type="hidden" asp-for="Disc.DiscId" />
+
+            <div class="disc-edit-card-body">
+                <div asp-validation-summary="ModelOnly" class="disc-validation-summary text-danger"></div>
+
+                <p class="disc-field-section-title">Record</p>
+                <div class="disc-field-row disc-full-width">
+                    <div class="disc-field-group">
+                        <label asp-for="Disc.RecordId" class="disc-field-label"></label>
+                        <select asp-for="Disc.RecordId" asp-items="Model.RecordList" class="disc-field-input">
+                            <option value="">— Select a Record —</option>
+                        </select>
+                        <span asp-validation-for="Disc.RecordId" class="disc-field-error"></span>
+                    </div>
+                </div>
+
+                <hr class="disc-field-divider" />
+
+                <p class="disc-field-section-title">Disc Details</p>
+                <div class="disc-field-row disc-full-width">
+                    <div class="disc-field-group">
+                        <label asp-for="Disc.Name" class="disc-field-label"></label>
+                        <input asp-for="Disc.Name" class="disc-field-input" placeholder="Disc title" />
+                        <span asp-validation-for="Disc.Name" class="disc-field-error"></span>
+                    </div>
+                </div>
+                <div class="disc-field-row disc-full-width">
+                    <div class="disc-field-group">
+                        <label asp-for="Disc.SubTitle" class="disc-field-label"></label>
+                        <input asp-for="Disc.SubTitle" class="disc-field-input" placeholder="Sub title or edition" />
+                        <span asp-validation-for="Disc.SubTitle" class="disc-field-error"></span>
+                    </div>
+                </div>
+                <div class="disc-field-row">
+                    <div class="disc-field-group">
+                        <label asp-for="Disc.DiscNumber" class="disc-field-label"></label>
+                        <input asp-for="Disc.DiscNumber" class="disc-field-input" placeholder="e.g. 1" />
+                        <span asp-validation-for="Disc.DiscNumber" class="disc-field-error"></span>
+                    </div>
+                    <div class="disc-field-group">
+                        <label asp-for="Disc.Length" class="disc-field-label"></label>
+                        <input asp-for="Disc.Length" class="disc-field-input" placeholder="e.g. 52:14" />
+                        <span asp-validation-for="Disc.Length" class="disc-field-error"></span>
+                    </div>
+                </div>
+                <div class="disc-field-row">
+                    <div class="disc-field-group">
+                        <label asp-for="Disc.Duration" class="disc-field-label"></label>
+                        <input asp-for="Disc.Duration" class="disc-field-input" placeholder="hh:mm:ss" />
+                        <span asp-validation-for="Disc.Duration" class="disc-field-error"></span>
+                    </div>
+                    <div class="disc-field-group">
+                        <label asp-for="Disc.Folder" class="disc-field-label"></label>
+                        <input asp-for="Disc.Folder" class="disc-field-input" placeholder="Folder path" />
+                        <span asp-validation-for="Disc.Folder" class="disc-field-error"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="disc-edit-card-footer">
+                <button type="submit" class="disc-btn-action disc-btn-save">💾 Save Changes</button>
+                <a asp-page="./Index" class="disc-btn-action disc-btn-back">← Back to Discs</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
