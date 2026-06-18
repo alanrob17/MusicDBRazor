@@ -34,6 +34,7 @@ namespace MusicDB.Pages.Discs
 
             var query = _context.Discs
                 .Include(d => d.Record)
+                    .ThenInclude(r => r.Artist)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(SearchString))
@@ -50,7 +51,9 @@ namespace MusicDB.Pages.Discs
                 CurrentPage = TotalPages;
 
             Disc = await query
-                .OrderBy(d => d.Record.Name)
+                .OrderBy(d => d.Record.Artist.LastName)
+                .ThenBy(d => d.Record.Artist.FirstName)
+                .ThenBy(d => d.Record.Recorded)
                 .ThenBy(d => d.DiscNumber)
                 .Skip((CurrentPage - 1) * PageSize)
                 .Take(PageSize)
