@@ -1,0 +1,141 @@
+@page
+@model MusicDB.Pages.Tracks.CreateModel
+
+@{
+    ViewData["Title"] = "Create Track";
+}
+
+<div class="container mt-4" style="max-width: 800px;">
+    <h1 class="mb-4">Create Track</h1>
+
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                Track Details
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label asp-for="Track.DiscId" class="form-label">Disc</label>
+                        <select asp-for="Track.DiscId" asp-items="Model.DiscList" class="form-select">
+                            <option value="">— Select a Disc —</option>
+                        </select>
+                        <span asp-validation-for="Track.DiscId" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="Track.Name" class="form-label">Name</label>
+                        <input asp-for="Track.Name" class="form-control" placeholder="Track filename / physical name" />
+                        <span asp-validation-for="Track.Name" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Track.Title" class="form-label">Title</label>
+                        <input asp-for="Track.Title" class="form-control" placeholder="Display Title" />
+                        <span asp-validation-for="Track.Title" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="Track.Artist" class="form-label">Artist</label>
+                        <input asp-for="Track.Artist" class="form-control" />
+                        <span asp-validation-for="Track.Artist" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Track.Album" class="form-label">Album</label>
+                        <input asp-for="Track.Album" class="form-control" />
+                        <span asp-validation-for="Track.Album" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label asp-for="Track.Number" class="form-label">Number</label>
+                        <input asp-for="Track.Number" type="number" class="form-control" placeholder="Track #" />
+                        <span asp-validation-for="Track.Number" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="Track.DiscNumber" class="form-label">Disc Number</label>
+                        <input asp-for="Track.DiscNumber" type="number" class="form-control" placeholder="Disc #" />
+                        <span asp-validation-for="Track.DiscNumber" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="Track.Recorded" class="form-label">Recorded Year</label>
+                        <input asp-for="Track.Recorded" type="number" class="form-control" placeholder="e.g. 1995" />
+                        <span asp-validation-for="Track.Recorded" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="Track.Length" class="form-label">Length</label>
+                        <input asp-for="Track.Length" class="form-control" placeholder="e.g. 03:45" />
+                        <span asp-validation-for="Track.Length" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Track.Duration" class="form-label">Duration</label>
+                        <input asp-for="Track.Duration" class="form-control" placeholder="hh:mm:ss" />
+                        <span asp-validation-for="Track.Duration" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="Track.Media" class="form-label">Media</label>
+                        <input asp-for="Track.Media" class="form-control" placeholder="e.g. CD, FLAC, Vinyl" />
+                        <span asp-validation-for="Track.Media" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Track.Field" class="form-label">Field</label>
+                        <input asp-for="Track.Field" class="form-control" placeholder="Genre / Category" />
+                        <span asp-validation-for="Track.Field" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label asp-for="Track.Bits" class="form-label">Bits</label>
+                        <input asp-for="Track.Bits" type="number" class="form-control" />
+                        <span asp-validation-for="Track.Bits" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="Track.BitRate" class="form-label">Bit Rate (kbps)</label>
+                        <input asp-for="Track.BitRate" type="number" class="form-control" />
+                        <span asp-validation-for="Track.BitRate" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="Track.AudioSampleRate" class="form-label">Sample Rate (Hz)</label>
+                        <input asp-for="Track.AudioSampleRate" type="number" class="form-control" />
+                        <span asp-validation-for="Track.AudioSampleRate" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="Track.AudioChannels" class="form-label">Channels</label>
+                        <input asp-for="Track.AudioChannels" type="number" class="form-control" />
+                        <span asp-validation-for="Track.AudioChannels" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label asp-for="Track.Folder" class="form-label">Folder</label>
+                        <input asp-for="Track.Folder" class="form-control" placeholder="Directory path" />
+                        <span asp-validation-for="Track.Folder" class="text-danger small"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-5 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Create Track</button>
+            <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

@@ -1,0 +1,58 @@
+@page
+@model MusicDB.Pages.Tracks.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete Track — " + Model.Track.Title;
+    var track = Model.Track;
+}
+
+<div class="container mt-4" style="max-width: 800px;">
+    <h1 class="mb-4">Delete Track</h1>
+
+    <div class="alert alert-danger mb-4" role="alert">
+        <h4 class="alert-heading">Warning!</h4>
+        <p class="m-0">Are you sure you want to permanently delete this track from the database? This action cannot be undone.</p>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-danger text-white">
+            Confirm Deletion: @(track.Title ?? "Unnamed Track")
+        </div>
+        <div class="card-body">
+            <dl class="row m-0">
+                <dt class="col-sm-4">Disc / Record</dt>
+                <dd class="col-sm-8">
+                    @(track.Disc?.Name ?? "—")
+                    @if (track.Disc?.Record != null)
+                    {
+                        <span>(Record: @track.Disc.Record.Name)</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-4">Track Name</dt>
+                <dd class="col-sm-8">@(track.Name ?? "—")</dd>
+
+                <dt class="col-sm-4">Track Title</dt>
+                <dd class="col-sm-8">@(track.Title ?? "—")</dd>
+
+                <dt class="col-sm-4">Artist</dt>
+                <dd class="col-sm-8">@(track.Artist ?? "—")</dd>
+
+                <dt class="col-sm-4">Album</dt>
+                <dd class="col-sm-8">@(track.Album ?? "—")</dd>
+
+                <dt class="col-sm-4">Track Number</dt>
+                <dd class="col-sm-8">@(track.Number?.ToString() ?? "—")</dd>
+
+                <dt class="col-sm-4">Recorded Year</dt>
+                <dd class="col-sm-8">@(track.Recorded?.ToString() ?? "—")</dd>
+            </dl>
+        </div>
+    </div>
+
+    <form method="post" class="mb-5 d-flex gap-2">
+        <input type="hidden" asp-for="Track.TrackId" />
+        <button type="submit" class="btn btn-danger">Confirm Delete</button>
+        <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

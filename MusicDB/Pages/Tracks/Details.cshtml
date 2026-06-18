@@ -1,0 +1,82 @@
+@page
+@model MusicDB.Pages.Tracks.DetailsModel
+
+@{
+    ViewData["Title"] = (Model.Track.Title ?? "Track") + " — Details";
+    var track = Model.Track;
+}
+
+<div class="container mt-4" style="max-width: 800px;">
+    <h1 class="mb-4">Track Details</h1>
+
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            @(track.Title ?? "Unnamed Track")
+        </div>
+        <div class="card-body">
+            <dl class="row m-0">
+                <dt class="col-sm-4">Disc / Record</dt>
+                <dd class="col-sm-8">
+                    @(track.Disc?.Name ?? "—") 
+                    @if (track.Disc?.Record != null)
+                    {
+                        <span>(Record: @track.Disc.Record.Name)</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-4">Track Name</dt>
+                <dd class="col-sm-8">@(track.Name ?? "—")</dd>
+
+                <dt class="col-sm-4">Track Title</dt>
+                <dd class="col-sm-8">@(track.Title ?? "—")</dd>
+
+                <dt class="col-sm-4">Artist</dt>
+                <dd class="col-sm-8">@(track.Artist ?? "—")</dd>
+
+                <dt class="col-sm-4">Album</dt>
+                <dd class="col-sm-8">@(track.Album ?? "—")</dd>
+
+                <dt class="col-sm-4">Track Number</dt>
+                <dd class="col-sm-8">@(track.Number?.ToString() ?? "—")</dd>
+
+                <dt class="col-sm-4">Disc Number</dt>
+                <dd class="col-sm-8">@(track.DiscNumber?.ToString() ?? "—")</dd>
+
+                <dt class="col-sm-4">Recorded Year</dt>
+                <dd class="col-sm-8">@(track.Recorded?.ToString() ?? "—")</dd>
+
+                <dt class="col-sm-4">Length</dt>
+                <dd class="col-sm-8">@(track.Length ?? "—")</dd>
+
+                <dt class="col-sm-4">Duration</dt>
+                <dd class="col-sm-8">@(track.Duration?.ToString(@"hh\:mm\:ss") ?? "—")</dd>
+
+                <dt class="col-sm-4">Media</dt>
+                <dd class="col-sm-8">@(track.Media ?? "—")</dd>
+
+                <dt class="col-sm-4">Field</dt>
+                <dd class="col-sm-8">@(track.Field ?? "—")</dd>
+
+                <dt class="col-sm-4">Bits</dt>
+                <dd class="col-sm-8">@(track.Bits?.ToString() ?? "—")</dd>
+
+                <dt class="col-sm-4">Bit Rate</dt>
+                <dd class="col-sm-8">@(track.BitRate?.ToString() ?? "—") kbps</dd>
+
+                <dt class="col-sm-4">Sample Rate</dt>
+                <dd class="col-sm-8">@(track.AudioSampleRate?.ToString() ?? "—") Hz</dd>
+
+                <dt class="col-sm-4">Channels</dt>
+                <dd class="col-sm-8">@(track.AudioChannels?.ToString() ?? "—")</dd>
+
+                <dt class="col-sm-4">Folder</dt>
+                <dd class="col-sm-8 text-break">@(track.Folder ?? "—")</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="mb-5 d-flex gap-2">
+        <a asp-page="./Edit" asp-route-id="@track.TrackId" class="btn btn-primary">Edit</a>
+        <a asp-page="./Index" class="btn btn-secondary">← Back to Tracks</a>
+    </div>
+</div>
