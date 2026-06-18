@@ -21,7 +21,7 @@
 
     <form method="get" class="mb-4">
         <div class="input-group">
-            <input type="text" name="SearchString" value="@Model.SearchString" class="form-control" placeholder="Search by name, title, or artist..." />
+            <input type="text" name="SearchString" value="@Model.SearchString" class="form-control" placeholder="Search by name or artist..." />
             <button type="submit" class="btn btn-outline-secondary">Search</button>
             @if (!string.IsNullOrEmpty(Model.SearchString))
             {
@@ -34,10 +34,10 @@
         <table class="table table-striped table-hover align-middle">
             <thead>
                 <tr>
+                    <th>Artist</th>
+                    <th>Album</th>
                     <th>#</th>
                     <th>Name</th>
-                    <th>Title</th>
-                    <th>Artist</th>
                     <th>Length</th>
                     <th>Disc</th>
                     <th>Actions</th>
@@ -47,10 +47,10 @@
                 @foreach (var item in Model.Track)
                 {
                     <tr>
+                        <td>@item.Artist</td>
+                        <td>@item.Album</td>
                         <td>@item.Number</td>
                         <td>@item.Name</td>
-                        <td>@item.Title</td>
-                        <td>@item.Artist</td>
                         <td>@item.Length</td>
                         <td>@(item.Disc?.Name ?? $"Disc {item.DiscNumber}")</td>
                         <td>

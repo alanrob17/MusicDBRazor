@@ -38,8 +38,7 @@ namespace MusicDB.Pages.Tracks
             {
                 query = query.Where(t =>
                     (t.Name != null && t.Name.Contains(SearchString)) ||
-                    (t.Artist != null && t.Artist.Contains(SearchString)) ||
-                    (t.Title != null && t.Title.Contains(SearchString)));
+                    (t.Artist != null && t.Artist.Contains(SearchString))); 
             }
 
             TotalCount = await query.CountAsync();
@@ -48,7 +47,11 @@ namespace MusicDB.Pages.Tracks
                 CurrentPage = TotalPages;
 
             Track = await query
-                .OrderBy(t => t.Title)
+                .OrderBy(t => t.Disc.Record.Artist.LastName)
+                .ThenBy(t => t.Disc.Record.Artist.FirstName)
+                .ThenBy(t => t.Disc.Record.Recorded)
+                .ThenBy(t => t.Disc.Record.Name)
+                .ThenBy(t => t.Disc.DiscNumber)
                 .ThenBy(t => t.Number)
                 .Skip((CurrentPage - 1) * PageSize)
                 .Take(PageSize)
