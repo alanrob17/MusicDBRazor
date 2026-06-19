@@ -114,4 +114,20 @@ body {
 
 .site-navbar-toggler:focus {
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.35);
+}
+
+/* Submenus */
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu > .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+}
+
+.dropdown-submenu:hover > .dropdown-menu {
+    display: block;
 }

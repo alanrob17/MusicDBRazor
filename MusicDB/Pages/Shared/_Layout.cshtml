@@ -25,14 +25,48 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link site-nav-link" asp-area="" asp-page="/Artists/Index">Artists</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link site-nav-link" asp-area="" asp-page="/Records/Index">Records</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link site-nav-link" asp-area="" asp-page="/Discs/Index">Discs</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link site-nav-link dropdown-toggle" href="#" id="maintenanceDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Maintenance
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="maintenanceDropdown">
+                                <li class="dropdown-submenu">
+                                    <a class="dropdown-item dropdown-toggle" href="#">Artists</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Artists/Index">Index</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Artists/Create">Create</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Artists/Edit">Edit</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Artists/Delete">Delete</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a class="dropdown-item dropdown-toggle" href="#">Records</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Records/Index">Index</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Records/Create">Create</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Records/Edit">Edit</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Records/Delete">Delete</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a class="dropdown-item dropdown-toggle" href="#">Disc</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Discs/Index">Index</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Discs/Create">Create</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Discs/Edit">Edit</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Discs/Delete">Delete</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a class="dropdown-item dropdown-toggle" href="#">Tracks</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Tracks/Index">Index</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Tracks/Create">Create</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Tracks/Edit">Edit</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Tracks/Delete">Delete</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
