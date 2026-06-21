@@ -130,4 +130,96 @@ body {
 
 .dropdown-submenu:hover > .dropdown-menu {
     display: block;
-}
+}
+
+/* ─── Maintenance Dropdown Menu Styling ─── */
+.dropdown-menu {
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    padding: 0.5rem 0;
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-item {
+    color: #495057;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.65rem 1.25rem;
+    transition: background 0.15s, color 0.15s, padding-left 0.15s;
+    position: relative;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background: #f0eeff;
+    color: #667eea;
+    padding-left: 1.5rem;
+}
+
+.dropdown-item.dropdown-toggle::after {
+    content: '';
+    float: right;
+    border: solid #495057;
+    border-width: 0.15em 0.15em 0 0;
+    display: inline-block;
+    padding: 0.25em;
+    margin-right: 0.5rem;
+    transform: rotate(45deg);
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.dropdown-item.dropdown-toggle:hover::after,
+.dropdown-item.dropdown-toggle:focus::after {
+    border-color: #667eea;
+    transform: rotate(135deg);
+}
+
+/* Section headers in dropdown */
+.dropdown-divider {
+    margin: 0.35rem 0;
+    border-top: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+/* Submenu arrow indicator */
+.dropdown-submenu > .dropdown-item::after {
+    content: '▸';
+    position: absolute;
+    right: 0.85rem;
+    margin: 0;
+    float: none;
+    border: none;
+    padding: 0;
+    display: inline;
+    transform: none;
+}
+
+.dropdown-submenu > .dropdown-item:hover::after,
+.dropdown-submenu > .dropdown-item:focus::after {
+    transform: none;
+    border: none;
+}
+
+/* Nested submenu */
+.dropdown-submenu > .dropdown-menu {
+    background: linear-gradient(135deg, #ffffff, #f8f9fa);
+    border: 1px solid rgba(102, 126, 234, 0.15);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* Maintenance dropdown toggle indicator */
+.nav-link.dropdown-toggle::after {
+    display: none;
+}
