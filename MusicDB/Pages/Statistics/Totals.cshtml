@@ -1,5 +1,5 @@
 @page
-@model MusicDB.Pages.Artists.TotalsModel
+@model MusicDB.Pages.Statistics.TotalsModel
 
 @{
     ViewData["Title"] = "Artist Totals";
@@ -25,7 +25,7 @@
             Page @currentPage of @totalPages
         </span>
     </div>
-    <a asp-page="./Index" class="btn-back btn-action">← Back to Artists</a>
+    <a asp-page="/Artists/Index" class="btn-back btn-action">← Back to Artists</a>
 </div>
 
 <div class="artists-card">
@@ -58,8 +58,8 @@
 @if (totalPages > 1)
 {
     <p class="pagination-info">
-        Showing records @(((currentPage - 1) * MusicDB.Pages.Artists.TotalsModel.PageSize) + 1)
-        – @(Math.Min(currentPage * MusicDB.Pages.Artists.TotalsModel.PageSize, Model.TotalCount))
+        Showing records @(((currentPage - 1) * MusicDB.Pages.Statistics.TotalsModel.PageSize) + 1)
+        – @(Math.Min(currentPage * MusicDB.Pages.Statistics.TotalsModel.PageSize, Model.TotalCount))
         of @Model.TotalCount
     </p>
 

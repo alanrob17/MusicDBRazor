@@ -37,7 +37,6 @@
                                     <a class="dropdown-item dropdown-toggle" href="#">Artists</a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" asp-area="" asp-page="/Artists/Index">Index</a></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/Artists/Totals">Totals</a></li>
                                         <li><a class="dropdown-item" asp-area="" asp-page="/Artists/Create">Create</a></li>
                                         <li><a class="dropdown-item" asp-area="" asp-page="/Artists/Edit">Edit</a></li>
                                         <li><a class="dropdown-item" asp-area="" asp-page="/Artists/Delete">Delete</a></li>
@@ -69,6 +68,17 @@
                                         <li><a class="dropdown-item" asp-area="" asp-page="/Tracks/Edit">Edit</a></li>
                                         <li><a class="dropdown-item" asp-area="" asp-page="/Tracks/Delete">Delete</a></li>
                                     </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link site-nav-link dropdown-toggle" href="#" id="statisticsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Statistics
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="statisticsDropdown">
+                                <li class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Statistics/Totals">Artist Totals</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="#">Next option</a></li>
                                 </li>
                             </ul>
                         </li>

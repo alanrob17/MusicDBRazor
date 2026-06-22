@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using MusicDB.Data.Models;
 using MusicDB.Data.Repositories.Interfaces;
 
-namespace MusicDB.Pages.Artists;
+namespace MusicDB.Pages.Statistics;
 
 public class TotalsModel : PageModel
 {
