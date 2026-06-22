@@ -1,0 +1,48 @@
+﻿@page
+@model MusicDB.Pages.Artists.DeleteArtistModel
+
+@{
+    ViewData["Title"] = "Select Artist to Delete";
+}
+<!--❌-->
+<div class="form-wrapper">
+    <div class="form-card">
+
+        @* ── Header ── *@
+        <div class="form-card-header">
+            <div class="artist-avatar danger">🗑️</div>
+            <div class="form-header-text">
+                <h1>Delete Artist</h1>
+                <span class="form-subtitle">Select an artist to delete their record</span>
+            </div>
+        </div>
+
+        @* ── Form ── *@
+        <form method="post">
+            <div class="form-card-body">
+
+                <p class="field-section-title">Artist Selection</p>
+
+                <div class="field-row full-width">
+                    <div class="field-group">
+                        <label for="selectedArtistId" class="field-label">Artist</label>
+                        <select id="selectedArtistId"
+                                name="selectedArtistId"
+                                class="field-input"
+                                asp-items="Model.ArtistSelectList">
+                            <option value="">— Select an artist —</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            @* ── Footer ── *@
+            <div class="form-card-footer">
+                <button type="submit" class="btn-action btn-primary-action">🗑️ Go to Delete</button>
+                <a asp-page="./Index" class="btn-action btn-back">← Back to Artists</a>
+            </div>
+        </form>
+
+    </div>
+</div>
