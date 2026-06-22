@@ -45,8 +45,8 @@
                 <tr>
                     <td class="td-id">@item.ArtistId</td>
                     <td class="td-name">@item.Name</td>
-                    <td class="td-number">@item.TotalDiscs</td>
-                    <td class="td-number">@item.TotalTracks</td>
+                    <td class="td-number">@item.TotalDiscs.ToString("N0")</td>
+                    <td class="td-number">@item.TotalTracks.ToString("N0")</td>
                     <td class="td-length">@item.TotalLengthFormatted</td>
                 </tr>
             }
