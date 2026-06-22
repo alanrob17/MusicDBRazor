@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MusicDB.Data;
+using MusicDB.Data.Repositories;
+using MusicDB.Data.Repositories.Interfaces;
 
 namespace MusicDB
 {
@@ -15,6 +17,9 @@ namespace MusicDB
             // Register the EF Core DbContext — reads "MusicDb" connection string from appsettings.json
             builder.Services.AddDbContext<MusicDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("MusicDb")));
+
+            // Register repositories (stored procedure access layer)
+            builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
 
             var app = builder.Build();
 

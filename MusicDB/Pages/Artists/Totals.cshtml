@@ -1,0 +1,89 @@
+@page
+@model MusicDB.Pages.Artists.TotalsModel
+
+@{
+    ViewData["Title"] = "Artist Totals";
+
+    // Pagination window: 15 buttons at a time
+    const int windowSize = 15;
+    int totalPages  = Model.TotalPages;
+    int currentPage = Model.CurrentPage;
+
+    // Calculate the start of the current 15-page window
+    int windowStart = ((currentPage - 1) / windowSize) * windowSize + 1;
+    int windowEnd   = Math.Min(windowStart + windowSize - 1, totalPages);
+
+    int prevWindowPage = windowStart - 1;       // last page of the previous window
+    int nextWindowPage = windowEnd   + 1;       // first page of the next window
+}
+
+<div class="artists-header">
+    <div>
+        <h1>📊 Artist Totals</h1>
+        <span class="record-count">
+            @Model.TotalCount artist@(Model.TotalCount != 1 ? "s" : "") &nbsp;·&nbsp;
+            Page @currentPage of @totalPages
+        </span>
+    </div>
+    <a asp-page="./Index" class="btn-back btn-action">← Back to Artists</a>
+</div>
+
+<div class="artists-card">
+    <table class="artists-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th class="text-center">Discs</th>
+                <th class="text-center">Tracks</th>
+                <th>Total Length</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ArtistTotals)
+            {
+                <tr>
+                    <td class="td-id">@item.ArtistId</td>
+                    <td class="td-name">@item.Name</td>
+                    <td class="td-number">@item.TotalDiscs</td>
+                    <td class="td-number">@item.TotalTracks</td>
+                    <td class="td-length">@item.TotalLengthFormatted</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@* ── Pagination ──────────────────────────────────────────── *@
+@if (totalPages > 1)
+{
+    <p class="pagination-info">
+        Showing records @(((currentPage - 1) * MusicDB.Pages.Artists.TotalsModel.PageSize) + 1)
+        – @(Math.Min(currentPage * MusicDB.Pages.Artists.TotalsModel.PageSize, Model.TotalCount))
+        of @Model.TotalCount
+    </p>
+
+    <div class="pagination-bar">
+
+        @* ◀ Previous 15-page window *@
+        @if (windowStart > 1)
+        {
+            <a asp-page="./Totals" asp-route-pageNumber="@prevWindowPage" class="page-btn nav-btn" title="Previous 15 pages">&#8249; Prev 15</a>
+        }
+
+        @* Numbered page buttons *@
+        @for (int p = windowStart; p <= windowEnd; p++)
+        {
+            <a asp-page="./Totals"
+               asp-route-pageNumber="@p"
+               class="page-btn @(p == currentPage ? "active" : "")">@p</a>
+        }
+
+        @* Next 15-page window ▶ *@
+        @if (windowEnd < totalPages)
+        {
+            <a asp-page="./Totals" asp-route-pageNumber="@nextWindowPage" class="page-btn nav-btn" title="Next 15 pages">Next 15 &#8250;</a>
+        }
+
+    </div>
+}

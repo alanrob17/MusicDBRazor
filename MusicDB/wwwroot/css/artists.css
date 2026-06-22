@@ -201,6 +201,24 @@
     text-align: right;
 }
 
+.td-id {
+    color: #adb5bd;
+    font-size: 0.8rem;
+    width: 3.5rem;
+}
+
+.td-number {
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    color: #667eea;
+}
+
+.td-length {
+    font-variant-numeric: tabular-nums;
+    color: #495057;
+}
+
 .action-link {
     font-size: 0.8rem;
     font-weight: 600;
