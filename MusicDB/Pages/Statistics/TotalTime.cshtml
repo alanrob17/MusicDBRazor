@@ -1,0 +1,38 @@
+﻿@page
+@model MusicDB.Pages.Statistics.TotalTimeModel
+@{
+    ViewData["Title"] = "Total Time";
+}
+
+<style>
+    div.track-card-header {
+        border-radius: 20px;
+    }
+</style>
+<div class="details-wrapper">
+    <div class="track-card">
+
+        @* Header *@
+        <div class="track-card-header">
+            <div class="track-avatar"><img src="/images/music-note.png" width="50" alt="Music" /></div>
+            <div class="track-header-text">
+                <h1>Total Digital Music Time</h1>
+                <h3 class="text-white mt-2">@Model.TotalTimes.FirstOrDefault()?.TotalLengthFormatted</h3>
+            </div>
+        </div>
+
+        @* Footer *@
+        <div class="track-card-footer">
+            <a asp-page="/Index" class="btn-action btn-back">
+                ← Back to Home
+            </a>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
