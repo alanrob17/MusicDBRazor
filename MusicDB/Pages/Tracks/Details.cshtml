@@ -4,77 +4,170 @@
 @{
     ViewData["Title"] = (Model.Track.Title ?? "Track") + " — Details";
     var track = Model.Track;
+    string initial = track.Title?.Length > 0 ? track.Title[0].ToString().ToUpper() : "♪";
 }
 
-<div class="container mt-4" style="max-width: 800px;">
-    <div class="card mb-4">
-        <div class="card-header bg-info text-white">
-            @(track.Title ?? "Unnamed Track")
+<div class="details-wrapper">
+    <div class="track-card">
+
+        @* Header *@
+        <div class="track-card-header">
+            <div class="track-avatar">@initial</div>
+            <div class="track-header-text">
+                <h1>@(track.Title ?? "Unnamed Track")</h1>
+                @if (!string.IsNullOrWhiteSpace(track.Artist))
+                {
+                    <span class="track-subtitle italic">@track.Artist</span>
+                }
+            </div>
         </div>
-        <div class="card-body">
-            <dl class="row m-0">
-                <dt class="col-sm-4">Disc / Record</dt>
-                <dd class="col-sm-8">
-                    @(track.Disc?.Name ?? "—") 
-                    @if (track.Disc?.Record != null)
-                    {
-                        <span>(Record: @track.Disc.Record.Name)</span>
-                    }
-                </dd>
 
-                <dt class="col-sm-4">Track Name</dt>
-                <dd class="col-sm-8">@(track.Name ?? "—")</dd>
+        @* Body *@
+        <div class="track-card-body">
+            <div class="detail-grid">
 
-                <dt class="col-sm-4">Track Title</dt>
-                <dd class="col-sm-8">@(track.Title ?? "—")</dd>
+                <div class="detail-row">
+                    <span class="detail-label">Disc / Record</span>
+                    <span class="detail-value @(track.Disc == null ? "empty" : "")">
+                        @if (track.Disc != null)
+                        {
+                            @(track.Disc.Name ?? "—")
+                            if (track.Disc.Record != null)
+                            {
+                                <span> (Record: @track.Disc.Record.Name)</span>
+                            }
+                        }
+                        else
+                        {
+                            <span>—</span>
+                        }
+                    </span>
+                </div>
 
-                <dt class="col-sm-4">Artist</dt>
-                <dd class="col-sm-8">@(track.Artist ?? "—")</dd>
+                <div class="detail-row">
+                    <span class="detail-label">Track Name</span>
+                    <span class="detail-value @(string.IsNullOrWhiteSpace(track.Name) ? "empty" : "")">
+                        @(string.IsNullOrWhiteSpace(track.Name) ? "—" : track.Name)
+                    </span>
+                </div>
 
-                <dt class="col-sm-4">Album</dt>
-                <dd class="col-sm-8">@(track.Album ?? "—")</dd>
+                <div class="detail-row">
+                    <span class="detail-label">Track Title</span>
+                    <span class="detail-value @(string.IsNullOrWhiteSpace(track.Title) ? "empty" : "")">
+                        @(string.IsNullOrWhiteSpace(track.Title) ? "—" : track.Title)
+                    </span>
+                </div>
 
-                <dt class="col-sm-4">Track Number</dt>
-                <dd class="col-sm-8">@(track.Number?.ToString() ?? "—")</dd>
+                <div class="detail-row">
+                    <span class="detail-label">Artist</span>
+                    <span class="detail-value @(string.IsNullOrWhiteSpace(track.Artist) ? "empty" : "")">
+                        @(string.IsNullOrWhiteSpace(track.Artist) ? "—" : track.Artist)
+                    </span>
+                </div>
 
-                <dt class="col-sm-4">Disc Number</dt>
-                <dd class="col-sm-8">@(track.DiscNumber?.ToString() ?? "—")</dd>
+                <div class="detail-row">
+                    <span class="detail-label">Album</span>
+                    <span class="detail-value @(string.IsNullOrWhiteSpace(track.Album) ? "empty" : "")">
+                        @(string.IsNullOrWhiteSpace(track.Album) ? "—" : track.Album)
+                    </span>
+                </div>
 
-                <dt class="col-sm-4">Recorded Year</dt>
-                <dd class="col-sm-8">@(track.Recorded?.ToString() ?? "—")</dd>
+                <div class="detail-row">
+                    <span class="detail-label">Track Number</span>
+                    <span class="detail-value @(track.Number == null ? "empty" : "")">
+                        @(track.Number?.ToString() ?? "—")
+                    </span>
+                </div>
 
-                <dt class="col-sm-4">Length</dt>
-                <dd class="col-sm-8">@(track.Length ?? "—")</dd>
+                <div class="detail-row">
+                    <span class="detail-label">Disc Number</span>
+                    <span class="detail-value @(track.DiscNumber == null ? "empty" : "")">
+                        @(track.DiscNumber?.ToString() ?? "—")
+                    </span>
+                </div>
 
-                <dt class="col-sm-4">Duration</dt>
-                <dd class="col-sm-8">@(track.Duration?.ToString(@"hh\:mm\:ss") ?? "—")</dd>
+                <div class="detail-row">
+                    <span class="detail-label">Recorded Year</span>
+                    <span class="detail-value @(track.Recorded == null ? "empty" : "")">
+                        @(track.Recorded?.ToString() ?? "—")
+                    </span>
+                </div>
 
-                <dt class="col-sm-4">Media</dt>
-                <dd class="col-sm-8">@(track.Media ?? "—")</dd>
+                <div class="detail-row">
+                    <span class="detail-label">Length</span>
+                    <span class="detail-value @(string.IsNullOrWhiteSpace(track.Length) ? "empty" : "")">
+                        @(string.IsNullOrWhiteSpace(track.Length) ? "—" : track.Length)
+                    </span>
+                </div>
 
-                <dt class="col-sm-4">Field</dt>
-                <dd class="col-sm-8">@(track.Field ?? "—")</dd>
+                <div class="detail-row">
+                    <span class="detail-label">Duration</span>
+                    <span class="detail-value @(track.Duration == null ? "empty" : "")">
+                        @(track.Duration?.ToString(@"hh\:mm\:ss") ?? "—")
+                    </span>
+                </div>
 
-                <dt class="col-sm-4">Bits</dt>
-                <dd class="col-sm-8">@(track.Bits?.ToString() ?? "—")</dd>
+                <div class="detail-row">
+                    <span class="detail-label">Media</span>
+                    <span class="detail-value @(string.IsNullOrWhiteSpace(track.Media) ? "empty" : "")">
+                        @(string.IsNullOrWhiteSpace(track.Media) ? "—" : track.Media)
+                    </span>
+                </div>
 
-                <dt class="col-sm-4">Bit Rate</dt>
-                <dd class="col-sm-8">@(track.BitRate?.ToString() ?? "—") kbps</dd>
+                <div class="detail-row">
+                    <span class="detail-label">Field</span>
+                    <span class="detail-value @(string.IsNullOrWhiteSpace(track.Field) ? "empty" : "")">
+                        @(string.IsNullOrWhiteSpace(track.Field) ? "—" : track.Field)
+                    </span>
+                </div>
 
-                <dt class="col-sm-4">Sample Rate</dt>
-                <dd class="col-sm-8">@(track.AudioSampleRate?.ToString() ?? "—") Hz</dd>
+                <div class="detail-row">
+                    <span class="detail-label">Bits</span>
+                    <span class="detail-value @(track.Bits == null ? "empty" : "")">
+                        @(track.Bits?.ToString() ?? "—")
+                    </span>
+                </div>
 
-                <dt class="col-sm-4">Channels</dt>
-                <dd class="col-sm-8">@(track.AudioChannels?.ToString() ?? "—")</dd>
+                <div class="detail-row">
+                    <span class="detail-label">Bit Rate</span>
+                    <span class="detail-value @(track.BitRate == null ? "empty" : "")">
+                        @(track.BitRate == null ? "—" : track.BitRate.ToString() + " kbps")
+                    </span>
+                </div>
 
-                <dt class="col-sm-4">Folder</dt>
-                <dd class="col-sm-8 text-break">@(track.Folder ?? "—")</dd>
-            </dl>
+                <div class="detail-row">
+                    <span class="detail-label">Sample Rate</span>
+                    <span class="detail-value @(track.AudioSampleRate == null ? "empty" : "")">
+                        @(track.AudioSampleRate == null ? "—" : track.AudioSampleRate.ToString() + " Hz")
+                    </span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Channels</span>
+                    <span class="detail-value @(track.AudioChannels == null ? "empty" : "")">
+                        @(track.AudioChannels?.ToString() ?? "—")
+                    </span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Folder</span>
+                    <span class="detail-value @(string.IsNullOrWhiteSpace(track.Folder) ? "empty" : "")">
+                        @(string.IsNullOrWhiteSpace(track.Folder) ? "—" : track.Folder)
+                    </span>
+                </div>
+
+            </div>
         </div>
-    </div>
 
-    <div class="mb-5 d-flex gap-2">
-        <a asp-page="./Edit" asp-route-id="@track.TrackId" class="btn btn-primary">Edit</a>
-        <a asp-page="./Index" class="btn btn-secondary">← Back to Tracks</a>
+        @* Footer *@
+        <div class="track-card-footer">
+            <a asp-page="./Edit" asp-route-id="@track.TrackId" class="btn-action btn-primary-action">
+                ✏️ Edit
+            </a>
+            <a asp-page="./Index" class="btn-action btn-back">
+                ← Back to Tracks
+            </a>
+        </div>
+
     </div>
 </div>
