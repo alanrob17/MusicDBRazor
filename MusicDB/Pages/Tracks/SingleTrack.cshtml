@@ -1,0 +1,53 @@
+﻿@page
+@model MusicDB.Pages.Tracks.SingleTrackModel
+@{
+    ViewData["Title"] = "Single Track Albums";
+}
+
+<div class="tracks-header">
+    <div>
+        <h1>🎵 Single TrackAlbums</h1>
+        <span class="record-count">
+            @Model.TotalCount track@(Model.TotalCount != 1 ? "s" : "") &nbsp;·&nbsp;
+        </span>
+    </div>
+    <a asp-page="/Tracks/Index" class="btn-back btn-action">← Back to Tracks</a>
+</div>
+
+<div class="artists-card">
+    <table class="artists-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Recorded</th>
+                <th>Field</th>
+                <th>Artist Name</th>
+                <th>Record Name</th>
+                <th>Track Name</th>
+                <th>Length</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.SingleTracks)
+            {
+                // RecordId, Recorded, Field, ArtistName, RecordName, TotalNoTracks, FullTrackName, Duration
+                <tr>
+                    <td class="td-id">@item.RecordId</td>
+                    <td class="td-number">@item.Recorded.ToString()</td>
+                    <td class="text-name">@item.Field</td>
+                    <td class="text-name">@item.ArtistName</td>
+                    <td class="text-name">@item.RecordName</td>
+                    <td class="td-name">@item.FullTrackName</td>
+                    <td class="td-length">@item.Duration.ToString("hh\\:mm\\:ss")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+@* Footer *@
+<div class="track-card-footer">
+    <a asp-page="./Index" class="btn-action btn-back">
+        ← Back to Tracks
+    </a>
+</div>
+</div>
+
