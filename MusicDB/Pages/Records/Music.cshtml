@@ -1,0 +1,38 @@
+﻿@page
+@model MusicDB.Pages.Records.MusicModel
+@{
+}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+    }
+
+    .music-button {
+        padding: 15px 30px;
+        font-size: 18px;
+        cursor: pointer;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+    }
+
+        .music-button:hover {
+            background-color: #45a049;
+        }
+</style>
+
+<h1>🎵 My Music Library</h1>
+
+<button class="music-button" onclick="playMusic()">
+    ▶ Play Bert Jansch - Birthday Blues
+</button>
+
+<script>
+    function playMusic() {
+        // Navigate to the handler that serves the M3U file
+        window.location.href = '@Url.Page("Music", "Play")';
+    }
+</script>

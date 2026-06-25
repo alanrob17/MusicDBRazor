@@ -78,10 +78,10 @@ else
         <table class="records-table">
             <thead>
                 <tr>
-                    <th>Record Name</th>
-                    <th>Sub Title</th>
                     <th>Year</th>
+                    <th>Record Name</th>
                     <th>Discs</th>
+                    <th>Length</th>
                     <th></th>
                 </tr>
             </thead>
@@ -91,12 +91,12 @@ else
                     @foreach (var item in Model.Records)
                     {
                         <tr>
+                            <td class="td-year"><strong>@item.Recorded</strong></td>
                             <td class="td-name">
                                 <a asp-page="/Records/GetRecord" asp-route-recordId="@item.RecordId">@item.Name</a>
                             </td>
-                            <td class="td-subtitle">@item.SubTitle</td>
-                            <td class="td-year">@item.Recorded</td>
                             <td class="td-discs">@item.Discs</td>
+                            <td class="td-subtitle">@item.Length</td>
                             <td class="td-actions">
                                 <a asp-page="/Records/Edit"    asp-route-id="@item.RecordId" class="action-link action-edit">Edit</a>
                                 <a asp-page="/Records/Details" asp-route-id="@item.RecordId" class="action-link action-details">Details</a>
