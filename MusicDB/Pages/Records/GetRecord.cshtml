@@ -1,0 +1,172 @@
+@page
+@model MusicDB.Pages.Records.GetRecordModel
+@{
+    ViewData["Title"] = (Model.Record.Name ?? "Record") + " — Tracks";
+    var record = Model.Record;
+}
+
+<link rel="stylesheet" href="~/css/tracks.css" />
+
+<style>
+    .record-card-body {
+        padding: 0.5rem 1.5rem;
+    }
+</style>
+<div class="details-wrapper" style="padding: 2rem 0 0.5rem; justify-content: stretch;">
+    <div class="record-card mb-2" style="max-width: 100%;">
+        <div class="record-card-header">
+            <div class="record-avatar">💿</div>
+            <div class="record-header-text">
+                <h1>@(record.Name ?? "Unknown Record")</h1>
+                <span class="record-subtitle">@(record.Artist?.Name ?? "Unknown Artist") @(record.Recorded.HasValue ? "· " + record.Recorded : "")</span>
+            </div>
+        </div>
+
+        <div class="record-card-body">
+            <div class="detail-grid">
+                @if (!string.IsNullOrWhiteSpace(record.SubTitle))
+                {
+                    <div class="detail-row">
+                        <span class="detail-label">Sub Title</span>
+                        <span class="detail-value">@record.SubTitle</span>
+                    </div>
+                }
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-3" style="border-top: 1px solid #f1f3f5; padding-top: 0.85rem;">
+                <div>
+                    <span class="detail-label" style="display: inline-block; width: auto; padding: 0; text-transform: uppercase; font-size: 0.78rem; font-weight: 700; color: #6c757d; letter-spacing: 0.07em;">Discs</span>
+                    <span class="detail-value" style="display: inline-block; font-weight: 600; font-size: 0.95rem; color: #212529; margin-left: 1ch; padding: 0;">@(record.Discs?.ToString() ?? "—")</span>
+                </div>
+                <a asp-page="/Artists/ArtistSearch" asp-route-SelectedArtistId="@record.ArtistId" class="btn-action btn-back" style="margin: 0; padding: 0.4rem 0.8rem; font-size: 0.85rem; width: auto; flex-shrink: 0; white-space: nowrap;">← Back to Artist Search</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+    @* ── DISCS & TRACKS LISTING ── *@
+    <div class="tracks-section mt-2">
+        <h2 class="mb-4" style="font-weight: 700; color: #212529;">🎶 Tracks List</h2>
+
+        @if (Model.Discs.Count > 1)
+        {
+            @foreach (var disc in Model.Discs)
+            {
+                <div class="disc-section mt-4 mb-4">
+                    <h3 class="disc-subheader" style="color: #4f46e5; border-bottom: 2px solid #e0e7ff; padding-bottom: 0.5rem; margin-bottom: 1rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>💿</span>
+                        <span>@(string.IsNullOrWhiteSpace(disc.Name) ? $"Disc {disc.DiscNumber}" : disc.Name)</span>
+                        @if (!string.IsNullOrWhiteSpace(disc.SubTitle))
+                        {
+                            <span class="text-muted" style="font-size: 0.8em; font-weight: normal; margin-left: 0.5rem;">— @disc.SubTitle</span>
+                        }
+                    </h3>
+
+                    <div class="tracks-card mb-2">
+                        <table class="tracks-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 60px; text-align: center;">#</th>
+                                    <th>Track Name</th>
+                                    <th>Length</th>
+                                    <th>Media</th>
+                                    <th style="width: 180px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (disc.Tracks.Any())
+                                {
+                                    @foreach (var track in disc.Tracks)
+                                    {
+                                        <tr>
+                                            <td style="text-align: center; font-weight: 600; color: #4f46e5;">@track.Number</td>
+                                            <td class="td-name">@track.Name</td>
+                                            <td class="td-length">@track.Length</td>
+                                            <td class="td-media">@track.Media</td>
+                                            <td class="td-actions">
+                                                <a asp-page="/Tracks/Edit"    asp-route-id="@track.TrackId" class="action-link action-edit">Edit</a>
+                                                <a asp-page="/Tracks/Details" asp-route-id="@track.TrackId" class="action-link action-details">Details</a>
+                                                <a asp-page="/Tracks/Delete"  asp-route-id="@track.TrackId" class="action-link action-delete">Delete</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted py-3">No tracks found on this disc.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    @if (!string.IsNullOrWhiteSpace(disc.Length))
+                    {
+                        <div style="font-size: 0.85rem; color: #6c757d; font-weight: 600; margin-top: 0.25rem; margin-bottom: 1.5rem; text-align: left; display: flex; align-items: center; gap: 0.35rem; padding-left: 0.25rem;">
+                            <span>⏱️</span>
+                            <span>Disc Length:</span>
+                            <span style="color: #212529;">@disc.Length</span>
+                        </div>
+                    }
+                </div>
+            }
+        }
+        else if (Model.Discs.Count == 1)
+        {
+            var disc = Model.Discs.First();
+            <div class="tracks-card mb-2">
+                <table class="tracks-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px; text-align: center;">#</th>
+                            <th>Track Name</th>
+                            <th>Title</th>
+                            <th>Length</th>
+                            <th>Media</th>
+                            <th style="width: 180px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (disc.Tracks.Any())
+                        {
+                            @foreach (var track in disc.Tracks)
+                            {
+                                <tr>
+                                    <td style="text-align: center; font-weight: 600; color: #4f46e5;">@track.Number</td>
+                                    <td class="td-name">@track.Name</td>
+                                    <td class="td-title">@track.Title</td>
+                                    <td class="td-length">@track.Length</td>
+                                    <td class="td-media">@track.Media</td>
+                                    <td class="td-actions">
+                                        <a asp-page="/Tracks/Edit"    asp-route-id="@track.TrackId" class="action-link action-edit">Edit</a>
+                                        <a asp-page="/Tracks/Details" asp-route-id="@track.TrackId" class="action-link action-details">Details</a>
+                                        <a asp-page="/Tracks/Delete"  asp-route-id="@track.TrackId" class="action-link action-delete">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-3">No tracks found for this record.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(disc.Length))
+            {
+                <div style="font-size: 0.85rem; color: #6c757d; font-weight: 600; margin-top: 0.25rem; text-align: left; display: flex; align-items: center; gap: 0.35rem; padding-left: 0.25rem;">
+                    <span>⏱️</span>
+                    <span>Disc Length:</span>
+                    <span style="color: #212529;">@disc.Length</span>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info py-4 text-center">
+                <span>ℹ️ No discs or tracks found for this record.</span>
+            </div>
+        }
+    </div>
