@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MusicDB.Data;
 using MusicDB.Data.Entities;
+using System.ComponentModel.DataAnnotations;
+using System.Numerics;
 
 namespace MusicDB.Pages.Tracks
 {
@@ -38,8 +40,11 @@ namespace MusicDB.Pages.Tracks
 
         public async Task<IActionResult> OnPostAsync()
         {
+
             if (!ModelState.IsValid)
             {
+                // TODO: For testing only, remove later. This is to help with debugging the model state errors.
+                var track = Track;
                 await PopulateDiscListAsync();
                 return Page();
             }

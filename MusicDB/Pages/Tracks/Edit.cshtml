@@ -101,7 +101,7 @@
                 <div class="field-row">
                     <div class="field-group">
                         <label asp-for="Track.Duration" class="field-label"></label>
-                        <input asp-for="Track.Duration" class="field-input" placeholder="hh:mm:ss" />
+                        <input asp-for="Track.Duration" type="time" step="1" class="field-input" />
                         <span asp-validation-for="Track.Duration" class="field-error"></span>
                     </div>
                     <div class="field-group">
