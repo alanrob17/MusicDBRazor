@@ -21,6 +21,13 @@ namespace MusicDB.Pages.Tracks
         [BindProperty]
         public Track Track { get; set; } = default!;
 
+        /// <summary>
+        /// Receives the HTML time input value ("HH:mm:ss") and is manually
+        /// converted to <see cref="TimeOnly"/> before saving.
+        /// </summary>
+        [BindProperty]
+        public string? DurationString { get; set; }
+
         public SelectList? DiscList { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -34,17 +41,32 @@ namespace MusicDB.Pages.Tracks
                 return NotFound();
 
             Track = track;
+            DurationString = Track.Duration?.ToString("hh\\:mm\\:ss");
             await PopulateDiscListAsync();
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            // Parse the duration string submitted by the HTML time input ("HH:mm:ss")
+            // into a TimeOnly value before the ModelState validity check.
+            if (!string.IsNullOrWhiteSpace(DurationString) &&
+                TimeOnly.TryParse(DurationString, out var parsedDuration))
+            {
+                Track.Duration = parsedDuration;
+            }
+            else
+            {
+                Track.Duration = null;
+            }
+
+            // Remove fields that are not submitted by the form so they don't
+            // block validation: Duration is set above; Disc is a navigation property.
+            ModelState.Remove("Track.Duration");
+            ModelState.Remove("Track.Disc");
 
             if (!ModelState.IsValid)
             {
-                // TODO: For testing only, remove later. This is to help with debugging the model state errors.
-                var track = Track;
                 await PopulateDiscListAsync();
                 return Page();
             }

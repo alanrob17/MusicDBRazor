@@ -5,6 +5,7 @@
     ViewData["Title"] = "Edit — " + (Model.Track.Title ?? "Track");
     var track = Model.Track;
     string initial = track.Title?.Length > 0 ? track.Title[0].ToString().ToUpper() : "♪";
+    string durationValue = track.Duration.HasValue ? track.Duration.Value.ToString("HH:mm:ss") : string.Empty;
 }
 
 <div class="form-wrapper">
@@ -101,7 +102,10 @@
                 <div class="field-row">
                     <div class="field-group">
                         <label asp-for="Track.Duration" class="field-label"></label>
-                        <input asp-for="Track.Duration" type="time" step="1" class="field-input" />
+                        <input type="time" step="1" class="field-input"
+                               id="Track_Duration"
+                               name="DurationString"
+                               value="@durationValue" />
                         <span asp-validation-for="Track.Duration" class="field-error"></span>
                     </div>
                     <div class="field-group">
