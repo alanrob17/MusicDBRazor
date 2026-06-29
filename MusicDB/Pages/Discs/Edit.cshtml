@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "Edit — " + (Model.Disc.Name ?? "Disc");
     var disc = Model.Disc;
+    string durationValue = disc.Duration.HasValue ? disc.Duration.Value.ToString("HH:mm:ss") : string.Empty;
 }
 
 <div class="disc-edit-wrapper">
@@ -65,7 +66,7 @@
                 <div class="disc-field-row">
                     <div class="disc-field-group">
                         <label asp-for="Disc.Duration" class="disc-field-label"></label>
-                        <input asp-for="Disc.Duration" class="disc-field-input" placeholder="hh:mm:ss" />
+                        <input type="time" step="1" class="field-input" id="Disc_Duration" name="DurationString" value="@durationValue" />
                         <span asp-validation-for="Disc.Duration" class="disc-field-error"></span>
                     </div>
                     <div class="disc-field-group">
