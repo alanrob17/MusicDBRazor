@@ -77,7 +77,7 @@
                     {
                         <tr>
                             <td class="td-artist">@item.ArtistName</td>
-                            <td class="td-album">@item.RecordName</td>
+                            <td class="td-album"><a asp-page="/Records/GetRecord" asp-route-recordId="@item.RecordId">@item.RecordName</a></td>
                             <td class="td-disc">@item.Recorded</td>
                             <td class="td-disc">@item.DiscName</td>
                             <td>@item.Number</td>
