@@ -17,10 +17,13 @@ namespace MusicDB.Pages.Tracks
 
         public Track Track { get; set; } = default!;
 
+        public Record Record { get; set; } = default!;
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
-                return NotFound();
+            if (id == null) { return NotFound(); }
+
+            var records = await _context.Records.ToListAsync();
 
             var track = await _context.Tracks
                 .Include(t => t.Disc)
@@ -31,6 +34,7 @@ namespace MusicDB.Pages.Tracks
                 return NotFound();
 
             Track = track;
+            Record = track.Disc.Record;
             return Page();
         }
     }

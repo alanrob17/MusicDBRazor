@@ -26,8 +26,15 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link site-nav-link" asp-area="" asp-page="/Artists/ArtistSearch">Search</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link site-nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Search
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="searchDropdown">
+                                <li><a class="dropdown-item" asp-area="" asp-page="/Artists/ArtistSearch">Artist Search</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/Tracks/GetGuestArtist">Guest Artist Search</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/Records/RecordSearch">Record Search</a></li>
+                            </ul>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link site-nav-link dropdown-toggle" href="#" id="maintenanceDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -38,7 +45,6 @@
                                     <a class="dropdown-item dropdown-toggle" href="#">Artists</a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" asp-area="" asp-page="/Artists/Index">Artist List</a></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/Artists/ArtistSearch">Artist Search</a></li>
                                         <li><a class="dropdown-item" asp-area="" asp-page="/Artists/Create">Create an Artist</a></li>
                                         <li><a class="dropdown-item" asp-area="" asp-page="/Artists/EditArtist">Edit an Artist</a></li>
                                         <li><a class="dropdown-item" asp-area="" asp-page="/Artists/DeleteArtist">Delete an Artist</a></li>
@@ -47,29 +53,28 @@
                                 <li class="dropdown-submenu">
                                     <a class="dropdown-item dropdown-toggle" href="#">Records</a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/Records/Index">Index</a></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/Records/RecordSearch">Record Search</a></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/Records/Create">Create</a></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/Records/Edit">Edit</a></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/Records/Delete">Delete</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Records/Index">Record List</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Records/Create">Create a Record</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Records/Edit">Edit a Record</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Records/Delete">Delete a Record</a></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
                                     <a class="dropdown-item dropdown-toggle" href="#">Disc</a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/Discs/Index">Index</a></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/Discs/Create">Create</a></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/Discs/Edit">Edit</a></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/Discs/Delete">Delete</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Discs/Index">Disc List</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Discs/Create">Create a Disc</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Discs/Edit">Edit a Disc</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Discs/Delete">Delete a Disc</a></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
                                     <a class="dropdown-item dropdown-toggle" href="#">Tracks</a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/Tracks/Index">Index</a></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/Tracks/Create">Create</a></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/Tracks/Edit">Edit</a></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/Tracks/Delete">Delete</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Tracks/Index">Track List</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Tracks/Create">Create a Track</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Tracks/Edit">Edit a Track</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Tracks/Delete">Delete a Track</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -79,10 +84,8 @@
                                 Statistics
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="statisticsDropdown">
-                                <li class="dropdown-menu">
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/Statistics/TotalTime">Total Music Time</a></li>
-                                    <li><a class="dropdown-item" asp-area="" asp-page="/Statistics/Totals">Artist Totals</a></li>
-                                </li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/Statistics/TotalTime">Total Music Time</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/Statistics/Totals">Artist Totals</a></li>
                             </ul>
                         </li>
                     </ul>
