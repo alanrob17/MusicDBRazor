@@ -62,7 +62,6 @@
     <table class="discs-table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Record</th>
                 <th>Disc Name</th>
                 <th>Disc #</th>
@@ -74,7 +73,6 @@
             @foreach (var item in Model.Disc)
             {
                 <tr>
-                    <td class="disc-td-id">@item.DiscId</td>
                     <td class="disc-td-record"><a asp-page="/Discs/GetDisc" asp-route-discId="@item.DiscId">@item.Record?.Name</a></td>
                     <td class="disc-td-name">@item.Name</td>
                     <td class="disc-td-number">@item.DiscNumber</td>
