@@ -24,7 +24,7 @@
         <div class="disc-avatar">💿</div>
         <div class="disc-header-text">
             <h1>@(disc.Name ?? "Disc")</h1>
-            <span class="disc-subtitle">@artistName:<a asp-page="/Records/Details" asp-route-Id="@disc.RecordId" class="disc-action-link disc-subtitle">@(disc.Record?.Name ?? "Unknown Record")</a></span>
+            <span class="disc-subtitle"><a asp-page="/Artists/ArtistSearch" asp-route-SelectedArtistId="@disc.Record.ArtistId">@artistName</a>:<a asp-page="/Records/Details" asp-route-Id="@disc.RecordId" class="disc-action-link disc-subtitle">@(disc.Record?.Name ?? "Unknown Record")</a></span>
         </div>
     </div>
 

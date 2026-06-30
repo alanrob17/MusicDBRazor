@@ -1,0 +1,88 @@
+@page
+@model MusicDB.Pages.Records.RecordSearchModel
+@{
+    ViewData["Title"] = "Record Search";
+}
+
+<div class="form-wrapper">
+    <div class="form-card" style="max-width: 600px; margin: 2rem auto;">
+        
+        <div class="form-card-header">
+            <div class="form-avatar">🔍</div>
+            <div class="form-header-text">
+                <h1>Record Search</h1>
+                <span class="form-subtitle">Search or select a record to view details</span>
+            </div>
+        </div>
+
+        <form method="get">
+            <div class="form-card-body">
+                
+                @* Search input for filtering dropdown *@
+                <div class="field-group">
+                    <label class="field-label" for="recordSearchInput">Search Record Name</label>
+                    <div class="d-flex gap-2">
+                        <input type="text" id="recordSearchInput" name="SearchString" value="@Model.SearchString" class="field-input" placeholder="Type to filter records..." autocomplete="off" />
+                        <button type="submit" class="btn-action btn-back" style="margin: 0; min-width: 80px;" title="Filter dropdown server-side">Filter</button>
+                    </div>
+                    <span class="field-error" style="font-size: 0.8rem; color: #6c757d; margin-top: 0.2rem; display: block;">
+                        Dropdown filters automatically as you type. Click "Filter" to filter server-side.
+                    </span>
+                </div>
+
+                <hr class="field-divider" />
+
+                @* Dropdown list *@
+                <div class="field-group">
+                    <label class="field-label" for="recordSelect">Select Record</label>
+                    <select id="recordSelect" name="SelectedRecordId" class="field-input" required>
+                        <option value="">-- Choose a Record --</option>
+                        @foreach (var item in Model.RecordSelectList)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="form-card-footer">
+                <button type="submit" class="btn-action btn-primary-action">💿 Show Record</button>
+                <a asp-page="./Index" class="btn-action btn-back">← Back to Records</a>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.getElementById("recordSearchInput");
+            const recordSelect = document.getElementById("recordSelect");
+
+            if (searchInput && recordSelect) {
+                // Keep a copy of the original options
+                const originalOptions = Array.from(recordSelect.options);
+
+                searchInput.addEventListener("input", function () {
+                    const filterText = searchInput.value.toLowerCase().trim();
+                    const selectedValue = recordSelect.value;
+
+                    // Clear options
+                    recordSelect.innerHTML = "";
+
+                    // Filter matching options
+                    originalOptions.forEach(option => {
+                        if (option.value === "" || option.text.toLowerCase().includes(filterText)) {
+                            recordSelect.appendChild(option.cloneNode(true));
+                        }
+                    });
+
+                    // Restore selected value if still present in filtered list
+                    recordSelect.value = selectedValue;
+                });
+            }
+        });
+    </script>
+}
