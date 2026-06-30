@@ -1,0 +1,100 @@
+﻿@page
+@model MusicDB.Pages.Discs.GetDiscModel
+@{
+    ViewData["Title"] = (Model.Disc.Record?.Name ?? "Disc") + " — Tracks";
+    var disc = Model.Disc;
+    var artistName = disc.Tracks.FirstOrDefault()?.Artist ?? "Unknown Artist";
+}
+
+<link rel="stylesheet" href="~/css/tracks.css" />
+
+<style>
+    .disc-card-body {
+        padding: 0.5rem 1.5rem;
+    }
+
+    .disc-subtitle {
+        font-size: 1.2rem;
+        font-style: normal;
+    }
+</style>
+
+<div class="disc-card mb-2" style="max-width: 100%;">
+    <div class="disc-card-header">
+        <div class="disc-avatar">💿</div>
+        <div class="disc-header-text">
+            <h1>@(disc.Name ?? "Disc")</h1>
+            <span class="disc-subtitle">@artistName:<a asp-page="/Records/Details" asp-route-Id="@disc.RecordId" class="disc-action-link disc-subtitle">@(disc.Record?.Name ?? "Unknown Record")</a></span>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-end mb-3 mt-3" style="border-top: 1px solid #f1f3f5; padding-top: 0.85rem;">
+        <a asp-page="/Artists/ArtistSearch"
+           asp-route-SelectedArtistId="@disc.Record.ArtistId"
+           class="btn-action btn-back ms-auto"
+           style="margin: 0; padding: 0.4rem 0.8rem; font-size: 0.85rem; width: auto; flex-shrink: 0; white-space: nowrap;">
+            ← Back to Artist Search
+        </a>
+    </div></div>
+
+@* ── DISC & TRACKS LISTING ── *@
+<div class="tracks-section mt-2">
+    <h2 class="mb-4" style="font-weight: 700; color: #212529;">🎶 Tracks List</h2>
+
+    @if (Model.Disc is not null)
+    {
+        // var disc = Model.Disc;
+        <div class="tracks-card mb-2">
+            <table class="tracks-table">
+                <thead>
+                    <tr>
+                        <th style="width: 60px; text-align: center;">#</th>
+                        <th>Track Name</th>
+                        <th>Length</th>
+                        <th>Media</th>
+                        <th style="width: 180px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (disc.Tracks.Any())
+                    {
+                        @foreach (var track in disc.Tracks)
+                        {
+                            <tr>
+                                <td style="text-align: center; font-weight: 600; color: #4f46e5;">@track.Number</td>
+                                <td class="td-name">@track.Name</td>
+                                <td class="td-length">@track.Length</td>
+                                <td class="td-media">@track.Media</td>
+                                <td class="td-actions">
+                                    <a asp-page="/Tracks/Edit" asp-route-id="@track.TrackId" class="action-link action-edit">Edit</a>
+                                    <a asp-page="/Tracks/Details" asp-route-id="@track.TrackId" class="action-link action-details">Details</a>
+                                    <a asp-page="/Tracks/Delete" asp-route-id="@track.TrackId" class="action-link action-delete">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-3">No tracks found for this record.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (!string.IsNullOrWhiteSpace(disc.Length))
+        {
+            <div style="font-size: 0.85rem; color: #6c757d; font-weight: 600; margin-top: 0.25rem; text-align: left; display: flex; align-items: center; gap: 0.35rem; padding-left: 0.25rem;">
+                <span>⏱️</span>
+                <span>Disc Length:</span>
+                <span style="color: #212529;">@disc.Length</span>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="alert alert-info py-4 text-center">
+            <span>ℹ️ No discs or tracks found for this record.</span>
+        </div>
+    }
+</div>
