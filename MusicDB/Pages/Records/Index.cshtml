@@ -25,6 +25,14 @@
                 Page @currentPage of @totalPages
             </span>
         }
+        else if (!string.IsNullOrWhiteSpace(Model.SearchString) && !string.IsNullOrEmpty(Model.Recorded))
+        {
+            <h1>💿 Albums recorded in @Model.Recorded</h1>
+            <span class="record-count">
+                @Model.TotalCount record@(Model.TotalCount != 1 ? "s" : "") &nbsp;·&nbsp;
+                Page @currentPage of @totalPages
+            </span>
+        }
         else if (!string.IsNullOrWhiteSpace(Model.SearchString) && Model.TotalCount == 0)
         {
             <h1>💿 No artist found</h1>
@@ -48,7 +56,7 @@
     <form method="get" class="search-form">
         <div class="search-input-wrapper">
             <span class="search-icon">🔍</span>
-            <input type="text" name="SearchString" value="@Model.SearchString" class="search-input" placeholder="Search by artist name..." />
+            <input type="text" name="SearchString" value="@Model.SearchString" class="search-input" placeholder="Search by artist name or Year recorded..." />
             @if (!string.IsNullOrEmpty(Model.SearchString))
             {
                 <a asp-page="./Index" class="clear-search-btn" title="Clear search">✖</a>
@@ -62,9 +70,23 @@
     <table class="records-table">
         <thead>
             <tr>
-                <th>Artist</th>
+               @{
+                    if (@Model.Recorded != null)
+                    {
+                        <th>Artist</th>
+                    }
+                    else if (!string.IsNullOrEmpty(Model.SearchString) && Model.MatchedArtistName != null)
+                    {
+                        <th>Year</th>
+                    }
+                    else
+                    {
+                        <th>Artist</th>
+                    }
+                }
                 <th>Record Name</th>
-                <th>Year</th>
+                <th>Length</th>
+                <th>Discs</th>
                 <th></th>
             </tr>
         </thead>
@@ -72,9 +94,24 @@
             @foreach (var item in Model.Record)
             {
                 <tr>
-                    <td class="td-artist">@item.Artist?.Name</td>
-                    <td class="td-name">@item.Name</td>
-                    <td class="td-year">@item.Recorded</td>
+                    @{
+                        if (@Model.Recorded != null)
+                        {
+
+                            <td class="td-artist"><a asp-page="/Artists/ArtistSearch" asp-route-SelectedArtistId="@item.ArtistId">@item.Artist?.Name</a></td>
+                        }
+                        else if (!string.IsNullOrEmpty(Model.SearchString) && Model.MatchedArtistName != null)
+                        {                            
+                            <td class="td-year"><strong>@item.Recorded</strong></td>
+                        }
+                        else
+                        {
+                            <td class="td-artist"><a asp-page="/Artists/ArtistSearch" asp-route-SelectedArtistId="@item.ArtistId">@item.Artist?.Name</a></td>
+                        }
+                    }
+                    <td class="td-name"><a asp-page="/Records/GetRecord" asp-route-recordId="@item.RecordId">@item.Name</a></td>
+                    <td class ="td-length">@item.Length</td>
+                    <td class="td-discs">@item.Discs</td>
                     <td class="td-actions">
                         <a asp-page="./Edit"    asp-route-id="@item.RecordId" class="action-link action-edit">Edit</a>
                         <a asp-page="./Details" asp-route-id="@item.RecordId" class="action-link action-details">Details</a>
