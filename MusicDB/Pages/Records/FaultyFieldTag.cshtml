@@ -1,0 +1,113 @@
+﻿@page
+@model MusicDB.Pages.Records.FaultyFieldTagModel
+@{
+    ViewData["Title"] = "Faulty Field Albums";
+
+    const int windowSize = 15;
+    int totalPages = Model.TotalPages;
+    int currentPage = Model.CurrentPage;
+    int windowStart = ((currentPage - 1) / windowSize) * windowSize + 1;
+    int windowEnd = Math.Min(windowStart + windowSize - 1, totalPages);
+    int prevWindowPage = windowStart - 1;
+    int nextWindowPage = windowEnd + 1;
+
+    bool hasResults = Model.Records.Count > 0;
+}
+
+<div class="tracks-header">
+    <div>
+        <h1>🎤 Albums with Faulty Field Tags</h1>
+        @if (hasResults)
+        {
+            <span class="record-count">
+                @Model.TotalCount albums@(Model.TotalCount != 1 ? "s" : "") &nbsp;·&nbsp;
+                Page @currentPage of @totalPages
+            </span>
+        }
+        else
+        {
+            <span class="record-count">No Albums found.</span>
+        }
+    </div>
+    <a asp-page="./Index" class="btn-back btn-action">← Back to Records</a>
+</div>
+
+@if (hasResults)
+{
+    <div class="records-card">
+        <table class="records-table">
+            <thead>
+                <tr>
+                    <th>Artist</th>
+                    <th>Record</th>
+                    <th>Recorded</th>
+                    <th>Field</th>
+                    <th>Discs</th>
+                    <th>Length</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (hasResults)
+                {
+                    @foreach (var item in Model.Records)
+                    {
+                        <tr>
+                            <td class="td-artist">@item.ArtistName</td>
+                            <td class="td-album"><a asp-page="/Records/GetRecord" asp-route-recordId="@item.RecordId">@item.Name</a></td>
+                            <td class="td-recorded">@item.Recorded</td>
+                            <td class="td-field">@item.Field</td>
+                            <td class="td-discs">@item.Discs</td>
+                            <td class="td-length">@item.Length</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" style="text-align:center; padding: 2rem; color:#6c757d; font-style:italic;">
+                            No Faulty Albums found!
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @* ── Pagination ──────────────────────────────────────────── *@
+    @if (totalPages > 1)
+    {
+        <p class="pagination-info">
+            Showing records @(((currentPage - 1) * MusicDB.Pages.Records.FaultyFieldTagModel.PageSize) + 1)
+            – @(Math.Min(currentPage * MusicDB.Pages.Records.FaultyFieldTagModel.PageSize, Model.TotalCount))
+            of @Model.TotalCount
+        </p>
+
+        <div class="pagination-bar">
+
+            @* ◀ Previous 15-page window *@
+            @if (windowStart > 1)
+            {
+                <a asp-page="./FaultyFieldTag"
+                   asp-route-pageNumber="@prevWindowPage"
+                   class="page-btn nav-btn" title="Previous 15 pages">&#8249; Prev 15</a>
+            }
+
+            @* Numbered page buttons *@
+            @for (int p = windowStart; p <= windowEnd; p++)
+            {
+                <a asp-page="./FaultyFieldTag"
+                   asp-route-pageNumber="@p"
+                   class="page-btn @(p == currentPage ? "active" : "")">@p</a>
+            }
+
+            @* Next 15-page window ▶ *@
+            @if (windowEnd < totalPages)
+            {
+                <a asp-page="./FaultyFieldTag"
+                   asp-route-pageNumber="@nextWindowPage"
+                   class="page-btn nav-btn" title="Next 15 pages">Next 15 &#8250;</a>
+            }
+
+        </div>
+    }
+}

@@ -20,6 +20,7 @@ namespace MusicDB
 
             // Register repositories (stored procedure access layer)
             builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
+            builder.Services.AddScoped<IRecordRepository, RecordRepository>();
             builder.Services.AddScoped<IStatisticsRepository, StatisticsRepository>();
             builder.Services.AddScoped<ITrackRepository, TrackRepository>();
 
