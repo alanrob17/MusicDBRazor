@@ -20,6 +20,9 @@ namespace MusicDB.Pages.Tracks
         [BindProperty(SupportsGet = true)]
         public string? SearchString { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string? ArtistSearch { get; set; }
+
         public IList<Track> Track { get; set; } = default!;
         public int CurrentPage { get; set; } = 1;
         public int TotalCount { get; set; }
@@ -34,11 +37,16 @@ namespace MusicDB.Pages.Tracks
                     .ThenInclude(d => d.Record)
                 .AsQueryable();
 
+            if (!string.IsNullOrWhiteSpace(ArtistSearch))
+            {
+                query = query.Where(t =>
+                    t.Artist != null && t.Artist.Contains(ArtistSearch));
+            }
+
             if (!string.IsNullOrWhiteSpace(SearchString))
             {
                 query = query.Where(t =>
-                    (t.Name != null && t.Name.Contains(SearchString)) ||
-                    (t.Artist != null && t.Artist.Contains(SearchString))); 
+                    t.Name != null && t.Name.Contains(SearchString));
             }
 
             TotalCount = await query.CountAsync();

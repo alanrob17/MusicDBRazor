@@ -28,9 +28,27 @@ public class TrackRepository : ITrackRepository
         return (items, items.Count);
     }
 
+    public async Task<(IReadOnlyList<BriefTrack> Items, int TotalCount)> GetGetBriefTrackListByYearAsync(string searchTerm, int page, int pageSize)
+    {
+        var param = new SqlParameter("@Recorded", searchTerm ?? string.Empty);
+
+        var all = await _context.Database
+            .SqlQuery<BriefTrack>($"EXEC up_GetBriefTrackListByYear @Recorded={param}")
+            .ToListAsync();
+
+        int totalCount = all.Count;
+
+        var items = all
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList()
+            .AsReadOnly();
+
+        return (items, totalCount);
+    }
+
     /// <inheritdoc/>
-    public async Task<(IReadOnlyList<GuestArtistTrack> Items, int TotalCount)> GetGuestArtistTracksAsync(
-        string searchTerm, int page, int pageSize)
+    public async Task<(IReadOnlyList<GuestArtistTrack> Items, int TotalCount)> GetGuestArtistTracksAsync(string searchTerm, int page, int pageSize)
     {
         var param = new SqlParameter("@ArtistName", searchTerm ?? string.Empty);
 
