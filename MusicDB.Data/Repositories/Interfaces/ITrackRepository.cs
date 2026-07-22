@@ -22,4 +22,10 @@ public interface ITrackRepository
     /// in-memory paging, and returns the current page together with the total row count.
     /// </summary>
     Task<(IReadOnlyList<GuestArtistTrack> Items, int TotalCount)> GetGuestArtistTracksAsync(string searchTerm, int page, int pageSize);
+
+    /// <summary>
+    /// Searches <c>Track.Name</c> for a partial match using LINQ, applies
+    /// in-memory paging, and returns the current page together with the total row count.
+    /// </summary>
+    Task<(IReadOnlyList<TrackNameResult> Items, int TotalCount)> GetTracksByNameAsync(string searchTerm, int page, int pageSize);
 }

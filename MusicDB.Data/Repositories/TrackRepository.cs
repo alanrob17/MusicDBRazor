@@ -1,7 +1,9 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using MusicDB.Data.Entities;
 using MusicDB.Data.Models;
 using MusicDB.Data.Repositories.Interfaces;
+
 
 namespace MusicDB.Data.Repositories;
 
@@ -54,6 +56,44 @@ public class TrackRepository : ITrackRepository
 
         var all = await _context.Database
             .SqlQuery<GuestArtistTrack>($"EXEC adm_GetArtistGuestTracks @ArtistName={param}")
+            .ToListAsync();
+
+        int totalCount = all.Count;
+
+        var items = all
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList()
+            .AsReadOnly();
+
+        return (items, totalCount);
+    }
+
+    /// <inheritdoc/>
+    public async Task<(IReadOnlyList<TrackNameResult> Items, int TotalCount)> GetTracksByNameAsync(string searchTerm, int page, int pageSize)
+    {
+        var term = searchTerm ?? string.Empty;
+
+        var all = await _context.Tracks
+            .Where(t => t.Name != null && t.Name.Contains(term))
+            .OrderBy(t => t.Disc.Record.Artist.Name)
+            .ThenBy(t => t.Disc.Record.Recorded)
+            .Select(t => new TrackNameResult
+            {
+                TrackId     = t.TrackId,
+                ArtistId    = t.Disc.Record.ArtistId,
+                ArtistName  = t.Disc.Record.Artist.Name,
+                RecordId    = t.Disc.RecordId,
+                RecordName  = t.Disc.Record.Name,
+                Recorded    = t.Disc.Record.Recorded,
+                Field       = t.Disc.Record.Field,
+                DiscId      = t.DiscId,
+                DiscName    = t.Disc.Name,
+                DiscNumber  = t.Disc.DiscNumber,
+                Number      = t.Number,
+                TrackName   = t.Name,
+                Length      = t.Length,
+            })
             .ToListAsync();
 
         int totalCount = all.Count;
