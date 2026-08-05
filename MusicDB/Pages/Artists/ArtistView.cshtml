@@ -1,0 +1,518 @@
+@page "{id:int}"
+@model MusicDB.Pages.Artists.ArtistViewModel
+
+@{
+    var artist  = Model.Artist;
+    var records = Model.Records;
+
+    ViewData["Title"] = (artist.Name ?? "Artist") + " — View";
+
+    // Build initials for the avatar
+    string initials = string.Concat(
+        artist.FirstName?.Length > 0 ? artist.FirstName[0].ToString() : "",
+        artist.LastName?.Length  > 0 ? artist.LastName[0].ToString()  : ""
+    );
+    if (initials.Length == 0)
+        initials = artist.Name?.Length > 0 ? artist.Name[0].ToString().ToUpper() : "?";
+
+    bool hasBio = !string.IsNullOrWhiteSpace(artist.Biography);
+}
+
+<style>
+/* ── ArtistView page-scoped styles ──────────────────────────── */
+
+/* Hero banner */
+.av-hero {
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 55%, #24243e 100%);
+    border-radius: 16px;
+    padding: 2.5rem 2.5rem 2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 40px rgba(15, 12, 41, 0.45);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animated shimmer overlay */
+.av-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg,
+        rgba(255,255,255,0) 30%,
+        rgba(255,255,255,0.04) 50%,
+        rgba(255,255,255,0) 70%);
+    background-size: 200% 100%;
+    animation: av-shimmer 5s linear infinite;
+    pointer-events: none;
+}
+
+@@keyframes av-shimmer {
+    from { background-position: 200% 0; }
+    to   { background-position: -200% 0; }
+}
+
+/* Avatar */
+.av-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    box-shadow: 0 0 0 4px rgba(102,126,234,0.4), 0 8px 24px rgba(0,0,0,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+    letter-spacing: -0.02em;
+}
+
+.av-hero-text { flex: 1; min-width: 0; }
+
+.av-name-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #a78bfa;
+    margin-bottom: 0.3rem;
+}
+
+.av-artist-name {
+    font-size: clamp(1.6rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    margin: 0 0 0.4rem;
+    word-break: break-word;
+}
+
+.av-full-name {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.5);
+    font-style: italic;
+    margin-bottom: 0.85rem;
+}
+
+/* Badge pills */
+.av-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.6rem;
+}
+
+.av-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.28rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.av-badge-records {
+    background: rgba(102,126,234,0.25);
+    color: #c4b5fd;
+    border: 1px solid rgba(102,126,234,0.4);
+}
+
+.av-badge-bio {
+    background: rgba(16,185,129,0.2);
+    color: #6ee7b7;
+    border: 1px solid rgba(16,185,129,0.35);
+}
+
+/* ── Biography toggle panel ─────────────────────────────────── */
+.av-bio-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.4rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(102,126,234,0.4);
+    transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+    text-decoration: none;
+    margin-bottom: 2rem;
+    user-select: none;
+}
+
+.av-bio-toggle:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102,126,234,0.5);
+    color: #fff;
+    text-decoration: none;
+}
+
+.av-bio-toggle .av-chevron {
+    display: inline-block;
+    transition: transform 0.28s ease;
+}
+
+.av-bio-toggle.open .av-chevron {
+    transform: rotate(180deg);
+}
+
+.av-bio-panel {
+    display: none;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+    padding: 1.75rem 2rem;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+    color: #374151;
+    line-height: 1.8;
+    animation: av-slide-down 0.25s ease;
+    overflow: hidden;
+}
+
+.av-bio-panel.open { display: block; }
+
+@@keyframes av-slide-down {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.av-bio-panel-header {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #9ca3af;
+    margin-bottom: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* Biography images (inline HTML in the field) */
+.av-bio-panel img {
+    width: 200px !important;
+    height: 200px !important;
+    object-fit: cover;
+}
+
+.av-bio-panel img.float-left {
+    float: left;
+    margin-right: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.av-bio-panel img.float-right {
+    float: right;
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.av-bio-panel::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* ── Meta strip ─────────────────────────────────────────────── */
+.av-meta-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1px;
+    background: #e9ecef;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+
+.av-meta-cell {
+    background: #fff;
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.av-meta-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #9ca3af;
+}
+
+.av-meta-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a2e;
+}
+
+.av-meta-value.empty {
+    color: #d1d5db;
+    font-style: italic;
+    font-weight: 400;
+}
+
+/* ── Page action buttons ────────────────────────────────────── */
+.av-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+/* ── Records table ──────────────────────────────────────────── */
+.av-records-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.av-records-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.av-records-count {
+    font-size: 0.8rem;
+    color: #9ca3af;
+    font-weight: 500;
+}
+
+.av-records-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.av-records-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+}
+
+.av-records-table thead {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #fff;
+}
+
+.av-records-table thead th {
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border: none;
+}
+
+.av-records-table tbody tr {
+    border-bottom: 1px solid #f3f4f6;
+    transition: background 0.14s;
+}
+
+.av-records-table tbody tr:last-child { border-bottom: none; }
+.av-records-table tbody tr:hover      { background: #f5f3ff; }
+.av-records-table tbody tr:nth-child(even) { background: #fafafa; }
+.av-records-table tbody tr:nth-child(even):hover { background: #f5f3ff; }
+.av-records-table td { padding: 0.65rem 1rem; vertical-align: middle; }
+
+.av-td-year   { width: 70px; text-align: center; font-weight: 700; color: #7c3aed; }
+.av-td-name   { color: #1a1a2e; font-weight: 500; }
+.av-td-discs  { width: 60px; text-align: center; color: #6b7280; }
+.av-td-length { width: 90px; color: #9ca3af; white-space: nowrap; }
+.av-td-field  { width: 110px; color: #9ca3af; font-size: 0.8rem; }
+.av-td-actions { white-space: nowrap; text-align: right; width: 200px; }
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@@media (max-width: 640px) {
+    .av-hero {
+        flex-direction: column;
+        padding: 1.5rem 1.25rem 1.25rem;
+        gap: 1.25rem;
+    }
+
+    .av-avatar { width: 68px; height: 68px; font-size: 1.6rem; }
+
+    .av-bio-panel { padding: 1.25rem; }
+
+    /* Hide less-critical columns on small screens */
+    .av-records-table thead th:nth-child(3),
+    .av-records-table thead th:nth-child(5),
+    .av-records-table td:nth-child(3),
+    .av-records-table td:nth-child(5) { display: none; }
+
+    .av-td-actions { width: auto; }
+}
+
+@@media (min-width: 641px) and (max-width: 900px) {
+    .av-hero { padding: 2rem 1.75rem 1.75rem; }
+    .av-bio-panel { padding: 1.5rem; }
+}
+</style>
+
+@* ── HERO BANNER ── *@
+<div class="av-hero">
+    <div class="av-avatar">@initials</div>
+    <div class="av-hero-text">
+        <div class="av-name-label">Artist</div>
+        <h1 class="av-artist-name">@(artist.Name ?? "Unknown Artist")</h1>
+
+        @if (!string.IsNullOrWhiteSpace(artist.FirstName) || !string.IsNullOrWhiteSpace(artist.LastName))
+        {
+            <div class="av-full-name">@artist.FirstName @artist.LastName</div>
+        }
+
+        <div class="av-badges">
+            <span class="av-badge av-badge-records">
+                💿 @Model.RecordCount @(Model.RecordCount == 1 ? "Record" : "Records")
+            </span>
+            @if (hasBio)
+            {
+                <span class="av-badge av-badge-bio">📖 Biography available</span>
+            }
+        </div>
+
+    </div>
+</div>
+
+@* ── META STRIP ── *@
+<div class="av-meta-strip">
+    <div class="av-meta-cell">
+        <span class="av-meta-label">Name</span>
+        <span class="av-meta-value">@(artist.Name ?? "—")</span>
+    </div>
+    <div class="av-meta-cell">
+        <span class="av-meta-label">First Name</span>
+        <span class="av-meta-value @(string.IsNullOrWhiteSpace(artist.FirstName) ? "empty" : "")">
+            @(string.IsNullOrWhiteSpace(artist.FirstName) ? "—" : artist.FirstName)
+        </span>
+    </div>
+    <div class="av-meta-cell">
+        <span class="av-meta-label">Last Name</span>
+        <span class="av-meta-value @(string.IsNullOrWhiteSpace(artist.LastName) ? "empty" : "")">
+            @(string.IsNullOrWhiteSpace(artist.LastName) ? "—" : artist.LastName)
+        </span>
+    </div>
+    <div class="av-meta-cell">
+        <span class="av-meta-label">Total Records</span>
+        <span class="av-meta-value">@Model.RecordCount</span>
+    </div>
+    <div class="av-meta-cell">
+        <span class="av-meta-label">Folder</span>
+        <span class="av-meta-value @(string.IsNullOrWhiteSpace(artist.Folder) ? "empty" : "")">
+            @(string.IsNullOrWhiteSpace(artist.Folder) ? "—" : artist.Folder)
+        </span>
+    </div>
+</div>
+
+@* ── ACTION BUTTONS ── *@
+<div class="av-actions">
+    <a asp-page="./Edit" asp-route-id="@artist.ArtistId" class="btn-action btn-primary-action">✏️ Edit</a>
+    <a asp-page="./Details" asp-route-id="@artist.ArtistId" class="btn-action btn-back">📋 Details</a>
+    <a asp-page="./Index" class="btn-action btn-back">← Back to Artists</a>
+</div>
+
+@* ── BIOGRAPHY TOGGLE + PANEL ── *@
+@if (hasBio)
+{
+    <button type="button" class="av-bio-toggle" id="bioToggle" aria-expanded="false" aria-controls="biographyPanel">
+        📖 Show Biography
+        <span class="av-chevron" aria-hidden="true">▼</span>
+    </button>
+    <div class="av-bio-panel" id="biographyPanel" role="region" aria-label="Artist Biography">
+        <div class="av-bio-panel-header">📖 Biography</div>
+        @Html.Raw(artist.Biography)
+    </div>
+}
+
+@* ── RECORDS TABLE ── *@
+<div class="av-records-header">
+    <h2 class="av-records-title">
+        💿 Discography
+    </h2>
+    <span class="av-records-count">@Model.RecordCount @(Model.RecordCount == 1 ? "album" : "albums")</span>
+</div>
+
+@if (records.Any())
+{
+    <div class="av-records-card">
+        <table class="av-records-table">
+            <thead>
+                <tr>
+                    <th class="av-td-year">Year</th>
+                    <th>Record Name</th>
+                    <th class="av-td-discs">Discs</th>
+                    <th class="av-td-length">Length</th>
+                    <th class="av-td-field">Field</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var rec in records)
+                {
+                    <tr>
+                        <td class="av-td-year">@rec.Recorded</td>
+                        <td class="av-td-name">
+                            <a asp-page="/Records/RecordView" asp-route-id="@rec.RecordId">@rec.Name</a>
+                        </td>
+                        <td class="av-td-discs">@rec.Discs</td>
+                        <td class="av-td-length">@rec.Length</td>
+                        <td class="av-td-field">@rec.Field</td>
+                        <td class="av-td-actions">
+                            <a asp-page="/Records/RecordView" asp-route-id="@rec.RecordId" class="action-link action-details">View</a>
+                            <a asp-page="/Records/Edit"       asp-route-id="@rec.RecordId" class="action-link action-edit">Edit</a>
+                            <a asp-page="/Records/GetRecord"  asp-route-recordId="@rec.RecordId" class="action-link action-details">Tracks</a>
+                            <a asp-page="/Records/Delete"     asp-route-id="@rec.RecordId" class="action-link action-delete">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-info py-4 text-center">
+        <span>ℹ️ No records found for this artist.</span>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        (function () {
+            const toggle = document.getElementById('bioToggle');
+            const panel  = document.getElementById('biographyPanel');
+            if (!toggle || !panel) return;
+
+            toggle.addEventListener('click', function () {
+                const isOpen = panel.classList.toggle('open');
+                toggle.classList.toggle('open', isOpen);
+                toggle.setAttribute('aria-expanded', isOpen);
+                toggle.childNodes[0].textContent = isOpen ? '📖 Hide Biography ' : '📖 Show Biography ';
+            });
+        })();
+    </script>
+}
