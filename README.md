@@ -1,5 +1,13 @@
 # MusicDBRazor 🎵
 
+[![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
+[![C# 14](https://img.shields.io/badge/C%23-14.0-239120?style=for-the-badge&logo=csharp&logoColor=white)](https://learn.microsoft.com/dotnet/csharp/)
+[![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-Razor%20Pages-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://learn.microsoft.com/aspnet/core/razor-pages/)
+[![Entity Framework Core](https://img.shields.io/badge/EF%20Core-10.0.9-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://learn.microsoft.com/ef/core/)
+[![Microsoft SQL Server](https://img.shields.io/badge/SQL%20Server-2022-CC292B?style=for-the-badge&logo=microsoftsqlserver&logoColor=white)](https://www.microsoft.com/sql-server)
+[![Bootstrap 5](https://img.shields.io/badge/Bootstrap-5.3-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
+[![xUnit](https://img.shields.io/badge/Tested%20With-xUnit-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://xunit.net/)
+
 A full-featured, responsive **ASP.NET Core 10.0 Razor Pages** web application engineered with a clean, decoupled Data Access Layer (DAL) using **Entity Framework Core 10** and a comprehensive **xUnit** test suite. The application manages, explores, and analyzes a rich hierarchical music catalog spanning artists, records (albums), multi-disc sets, and audio tracks.
 
 ---
