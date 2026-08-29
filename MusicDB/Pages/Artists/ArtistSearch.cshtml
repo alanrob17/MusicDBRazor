@@ -93,7 +93,7 @@ else
                         <tr>
                             <td class="td-year"><strong>@item.Recorded</strong></td>
                             <td class="td-name">
-                                <a asp-page="/Records/GetRecord" asp-route-recordId="@item.RecordId">@item.Name</a>
+                                <a asp-page="/Records/RecordView" asp-route-id="@item.RecordId">@item.Name</a>
                             </td>
                             <td class="td-discs">@item.Discs</td>
                             <td class="td-subtitle">@item.Length</td>

@@ -34,7 +34,7 @@ namespace MusicDB.Pages.Records
             // redirect them to the GetRecord page with the selected RecordId.
             if (SelectedRecordId.HasValue && SelectedRecordId.Value > 0)
             {
-                return RedirectToPage("/Records/GetRecord", new { recordId = SelectedRecordId.Value });
+                return RedirectToPage("/Records/RecordView", new { id = SelectedRecordId.Value });
             }
 
             // Populate the dropdown list with records, filtered if SearchString is specified
