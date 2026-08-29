@@ -1,42 +1,556 @@
-@page
+@page "{id:int?}"
 @model MusicDB.Pages.Tracks.DetailsModel
 
 @{
-    ViewData["Title"] = (Model.Track.Title ?? "Track") + " — Details";
     var track = Model.Track;
-    var record = track.Disc?.Record;
-    string initial = track.Title?.Length > 0 ? track.Title[0].ToString().ToUpper() : "♪";
+    var record = Model.Record;
+    var artist = record?.Artist;
+    var artistName = track.Artist ?? artist?.Name ?? "Unknown Artist";
+    var trackTitle = track.Title ?? track.Name ?? "Track Details";
+    ViewData["Title"] = $"{trackTitle} — Details";
+
+    string initial = !string.IsNullOrWhiteSpace(track.Title) 
+        ? track.Title[0].ToString().ToUpper() 
+        : (!string.IsNullOrWhiteSpace(track.Name) ? track.Name[0].ToString().ToUpper() : "♪");
 }
 
-<div class="details-wrapper">
-    <div class="track-card">
+<style>
+/* ── Track Details page-scoped styles ───────────────────────── */
 
-        @* Header *@
-        <div class="track-card-header">
-            <div class="track-avatar">@initial</div>
-            <div class="track-header-text">
-                <h1>@(track.Title ?? "Unnamed Track")</h1>
-                @if (!string.IsNullOrWhiteSpace(track.Artist))
+/* Hero Banner */
+.td-hero {
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 55%, #24243e 100%);
+    border-radius: 16px;
+    padding: 2.5rem 2.5rem 2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 40px rgba(15, 12, 41, 0.45);
+    position: relative;
+    overflow: hidden;
+}
+
+.td-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg,
+        rgba(255,255,255,0) 30%,
+        rgba(255,255,255,0.04) 50%,
+        rgba(255,255,255,0) 70%);
+    background-size: 200% 100%;
+    animation: td-shimmer 5s linear infinite;
+    pointer-events: none;
+}
+
+@@keyframes td-shimmer {
+    from { background-position: 200% 0; }
+    to   { background-position: -200% 0; }
+}
+
+.td-avatar-icon {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    box-shadow: 0 0 0 4px rgba(102,126,234,0.4), 0 8px 24px rgba(0,0,0,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+    letter-spacing: -0.02em;
+}
+
+.td-hero-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.td-breadcrumb {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #a78bfa;
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.td-breadcrumb a {
+    color: #c4b5fd;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.td-breadcrumb a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.td-track-title {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.15;
+    margin: 0 0 0.5rem;
+    word-break: break-word;
+}
+
+.td-track-subtitle {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.td-track-subtitle a {
+    color: #93c5fd;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.td-track-subtitle a:hover {
+    color: #bfdbfe;
+    text-decoration: underline;
+}
+
+/* Badge pills */
+.td-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.td-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    backdrop-filter: blur(6px);
+}
+
+.td-badge-year   { background: rgba(102,126,234,0.25); color: #c4b5fd; border: 1px solid rgba(102,126,234,0.4); }
+.td-badge-disc   { background: rgba(16,185,129,0.2);   color: #6ee7b7; border: 1px solid rgba(16,185,129,0.35); }
+.td-badge-field  { background: rgba(245,158,11,0.2);   color: #fcd34d; border: 1px solid rgba(245,158,11,0.35); }
+.td-badge-length { background: rgba(239,68,68,0.2);    color: #fca5a5; border: 1px solid rgba(239,68,68,0.35); }
+.td-badge-media  { background: rgba(14,165,233,0.2);   color: #7dd3fc; border: 1px solid rgba(14,165,233,0.35); }
+
+/* ── Meta Info Strip ────────────────────────────────────────── */
+.td-meta-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1px;
+    background: #e9ecef;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+
+.td-meta-cell {
+    background: #fff;
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.td-meta-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #9ca3af;
+}
+
+.td-meta-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a2e;
+}
+
+.td-meta-value a {
+    color: #4f46e5;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.td-meta-value a:hover {
+    color: #3730a3;
+    text-decoration: underline;
+}
+
+.td-meta-value.empty {
+    color: #d1d5db;
+    font-style: italic;
+    font-weight: 400;
+}
+
+/* ── Action Buttons ─────────────────────────────────────────── */
+.td-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+/* ── Section Cards Grid ─────────────────────────────────────── */
+.td-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.td-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.td-card-header {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #fff;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.td-card-body {
+    padding: 1.25rem 1.5rem;
+    flex: 1;
+}
+
+.td-detail-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.td-detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f3f4f6;
+    gap: 1rem;
+    font-size: 0.92rem;
+}
+
+.td-detail-item:last-child {
+    border-bottom: none;
+}
+
+.td-item-label {
+    font-weight: 600;
+    color: #6b7280;
+    flex-shrink: 0;
+    min-width: 130px;
+}
+
+.td-item-value {
+    color: #1f2937;
+    font-weight: 500;
+    text-align: right;
+    word-break: break-word;
+}
+
+.td-item-value.code-path {
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.82rem;
+    background: #f3f4f6;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    color: #374151;
+    text-align: left;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.td-item-value a {
+    color: #4f46e5;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.td-item-value a:hover {
+    text-decoration: underline;
+}
+
+.td-pill-tag {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    background: #e0e7ff;
+    color: #4338ca;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@@media (max-width: 768px) {
+    .td-hero {
+        flex-direction: column;
+        padding: 1.5rem 1.25rem;
+        gap: 1.25rem;
+    }
+
+    .td-avatar-icon {
+        width: 68px;
+        height: 68px;
+        font-size: 1.8rem;
+    }
+
+    .td-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .td-detail-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+
+    .td-item-value {
+        text-align: left;
+    }
+}
+</style>
+
+@* ── Hero Banner ── *@
+<div class="td-hero">
+    <div class="td-avatar-icon">@initial</div>
+    <div class="td-hero-text">
+        <div class="td-breadcrumb">
+            @if (artist != null)
+            {
+                <a asp-page="/Artists/ArtistSearch" asp-route-SelectedArtistId="@artist.ArtistId">@artist.Name</a>
+                <span>›</span>
+            }
+            @if (record != null)
+            {
+                <a asp-page="/Records/RecordView" asp-route-id="@record.RecordId">@(record.Name ?? "Record")</a>
+                <span>›</span>
+            }
+            <span>Track #@(track.Number?.ToString() ?? "—")</span>
+        </div>
+
+        <h1 class="td-track-title">@(track.Title ?? track.Name ?? "Unnamed Track")</h1>
+
+        <div class="td-track-subtitle">
+            <span>By <strong>@artistName</strong></span>
+            @if (record != null)
+            {
+                <span>• From album <a asp-page="/Records/RecordView" asp-route-id="@record.RecordId">@(record.Name ?? "Unknown Album")</a></span>
+            }
+            else if (!string.IsNullOrWhiteSpace(track.Album))
+            {
+                <span>• From album <strong>@track.Album</strong></span>
+            }
+        </div>
+
+        <div class="td-badges">
+            @if (track.Recorded.HasValue)
+            {
+                <span class="td-badge td-badge-year">🎙️ @track.Recorded</span>
+            }
+            @if (track.Number.HasValue)
+            {
+                <span class="td-badge td-badge-disc">🎵 Track @track.Number</span>
+            }
+            @if (track.DiscNumber.HasValue)
+            {
+                <span class="td-badge td-badge-disc">💿 Disc @track.DiscNumber</span>
+            }
+            @if (!string.IsNullOrWhiteSpace(track.Length))
+            {
+                <span class="td-badge td-badge-length">⏱️ @track.Length</span>
+            }
+            @if (!string.IsNullOrWhiteSpace(track.Media))
+            {
+                <span class="td-badge td-badge-media">🎚️ @track.Media</span>
+            }
+            @if (!string.IsNullOrWhiteSpace(track.Field))
+            {
+                <span class="td-badge td-badge-field">🎸 @track.Field</span>
+            }
+        </div>
+    </div>
+</div>
+
+@* ── Quick Meta Info Strip ── *@
+<div class="td-meta-strip">
+    <div class="td-meta-cell">
+        <span class="td-meta-label">Artist</span>
+        <span class="td-meta-value">
+            @if (artist != null)
+            {
+                <a asp-page="/Artists/ArtistSearch" asp-route-SelectedArtistId="@artist.ArtistId">@artistName</a>
+            }
+            else
+            {
+                @artistName
+            }
+        </span>
+    </div>
+    <div class="td-meta-cell">
+        <span class="td-meta-label">Album / Record</span>
+        <span class="td-meta-value @(record == null && string.IsNullOrWhiteSpace(track.Album) ? "empty" : "")">
+            @if (record != null)
+            {
+                <a asp-page="/Records/RecordView" asp-route-id="@record.RecordId">@(record.Name ?? "—")</a>
+            }
+            else
+            {
+                @(track.Album ?? "—")
+            }
+        </span>
+    </div>
+    <div class="td-meta-cell">
+        <span class="td-meta-label">Disc / Track</span>
+        <span class="td-meta-value">
+            Disc @(track.DiscNumber?.ToString() ?? "1") · #@(track.Number?.ToString() ?? "—")
+        </span>
+    </div>
+    <div class="td-meta-cell">
+        <span class="td-meta-label">Duration</span>
+        <span class="td-meta-value @(track.Duration == null && string.IsNullOrWhiteSpace(track.Length) ? "empty" : "")">
+            @(track.Duration?.ToString(@"hh\:mm\:ss") ?? track.Length ?? "—")
+        </span>
+    </div>
+    <div class="td-meta-cell">
+        <span class="td-meta-label">Media</span>
+        <span class="td-meta-value @(string.IsNullOrWhiteSpace(track.Media) ? "empty" : "")">
+            @(track.Media ?? "—")
+        </span>
+    </div>
+</div>
+
+@* ── Page Actions ── *@
+<div class="td-actions">
+    <a asp-page="./Edit" asp-route-id="@track.TrackId" class="btn-action btn-primary-action">✏️ Edit Track</a>
+    @if (record != null)
+    {
+        <a asp-page="/Records/RecordView" asp-route-id="@record.RecordId" class="btn-action btn-back">💿 View Album</a>
+    }
+    @if (artist != null)
+    {
+        <a asp-page="/Artists/ArtistSearch" asp-route-SelectedArtistId="@artist.ArtistId" class="btn-action btn-back">👤 View Artist</a>
+    }
+    <a asp-page="./Delete" asp-route-id="@track.TrackId" class="btn-action btn-delete">🗑️ Delete</a>
+    <a asp-page="./Index" class="btn-action btn-back">← Back to Tracks</a>
+</div>
+
+@* ── Detailed Two-Column Cards Grid ── *@
+<div class="td-cards-grid">
+
+    @* Card 1: Track & Release Details *@
+    <div class="td-card">
+        <div class="td-card-header">
+            <span>🎼</span>
+            <span>Track &amp; Release Info</span>
+        </div>
+        <div class="td-card-body">
+            <div class="td-detail-list">
+                <div class="td-detail-item">
+                    <span class="td-item-label">Track Title</span>
+                    <span class="td-item-value">@(track.Title ?? "—")</span>
+                </div>
+                <div class="td-detail-item">
+                    <span class="td-item-label">File / Raw Name</span>
+                    <span class="td-item-value">@(track.Name ?? "—")</span>
+                </div>
+                <div class="td-detail-item">
+                    <span class="td-item-label">Artist</span>
+                    <span class="td-item-value">
+                        @if (artist != null)
+                        {
+                            <a asp-page="/Artists/ArtistSearch" asp-route-SelectedArtistId="@artist.ArtistId">@artistName</a>
+                        }
+                        else
+                        {
+                            @artistName
+                        }
+                    </span>
+                </div>
+                <div class="td-detail-item">
+                    <span class="td-item-label">Album / Record</span>
+                    <span class="td-item-value">
+                        @if (record != null)
+                        {
+                            <a asp-page="/Records/RecordView" asp-route-id="@record.RecordId">@(record.Name ?? "—")</a>
+                        }
+                        else
+                        {
+                            @(track.Album ?? "—")
+                        }
+                    </span>
+                </div>
+                <div class="td-detail-item">
+                    <span class="td-item-label">Disc</span>
+                    <span class="td-item-value">
+                        @(track.Disc?.Name ?? $"Disc {track.DiscNumber ?? 1}")
+                    </span>
+                </div>
+                <div class="td-detail-item">
+                    <span class="td-item-label">Track Number</span>
+                    <span class="td-item-value">
+                        <span class="td-pill-tag">#@(track.Number?.ToString() ?? "—")</span>
+                    </span>
+                </div>
+                <div class="td-detail-item">
+                    <span class="td-item-label">Recorded Year</span>
+                    <span class="td-item-value">@(track.Recorded?.ToString() ?? "—")</span>
+                </div>
+                <div class="td-detail-item">
+                    <span class="td-item-label">Field / Genre</span>
+                    <span class="td-item-value">@(track.Field ?? "—")</span>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(track.Folder))
                 {
-                    <span class="track-subtitle" style="font-size: 1.2rem; font-style: normal;"><a asp-page="/Artists/ArtistSearch" asp-route-SelectedArtistId="@record.ArtistId">@track.Artist</a></span>
+                    <div class="td-detail-item">
+                        <span class="td-item-label">Folder</span>
+                        <span class="td-item-value code-path" title="@track.Folder">@track.Folder</span>
+                    </div>
                 }
             </div>
         </div>
+    </div>
 
-        @* Body *@
-        <div class="track-card-body">
-            <div class="detail-grid">
-
-                <div class="detail-row">
-                    <span class="detail-label">Disc / Record</span>
-                    <span class="detail-value @(track.Disc == null ? "empty" : "")">
-                        @if (track.Disc != null)
+    @* Card 2: Audio & Technical Specs *@
+    <div class="td-card">
+        <div class="td-card-header">
+            <span>🎛️</span>
+            <span>Audio &amp; Technical Specs</span>
+        </div>
+        <div class="td-card-body">
+            <div class="td-detail-list">
+                <div class="td-detail-item">
+                    <span class="td-item-label">Media Type</span>
+                    <span class="td-item-value">
+                        @if (!string.IsNullOrWhiteSpace(track.Media))
                         {
-                            @(track.Disc.Name ?? "—")
-                            if (track.Disc.Record != null)
-                            {
-                                <span> (Record: @track.Disc.Record.Name)</span>
-                            }
+                            <span class="td-pill-tag">@track.Media</span>
                         }
                         else
                         {
@@ -44,131 +558,56 @@
                         }
                     </span>
                 </div>
-
-                <div class="detail-row">
-                    <span class="detail-label">Track Name</span>
-                    <span class="detail-value @(string.IsNullOrWhiteSpace(track.Name) ? "empty" : "")">
-                        @(string.IsNullOrWhiteSpace(track.Name) ? "—" : track.Name)
+                <div class="td-detail-item">
+                    <span class="td-item-label">Length</span>
+                    <span class="td-item-value">@(track.Length ?? "—")</span>
+                </div>
+                <div class="td-detail-item">
+                    <span class="td-item-label">Duration</span>
+                    <span class="td-item-value">@(track.Duration?.ToString(@"hh\:mm\:ss") ?? "—")</span>
+                </div>
+                <div class="td-detail-item">
+                    <span class="td-item-label">Bit Depth</span>
+                    <span class="td-item-value">
+                        @if (track.Bits.HasValue)
+                        {
+                            @($"{track.Bits}-bit")
+                            @(track.Bits >= 24 ? " (Hi-Res)" : track.Bits == 16 ? " (CD Quality)" : "")
+                        }
+                        else
+                        {
+                            <span>—</span>
+                        }
                     </span>
                 </div>
-
-                <div class="detail-row">
-                    <span class="detail-label">Track Title</span>
-                    <span class="detail-value @(string.IsNullOrWhiteSpace(track.Title) ? "empty" : "")">
-                        @(string.IsNullOrWhiteSpace(track.Title) ? "—" : track.Title)
+                <div class="td-detail-item">
+                    <span class="td-item-label">Bit Rate</span>
+                    <span class="td-item-value">
+                        @(track.BitRate.HasValue ? $"{track.BitRate} kbps" : "—")
                     </span>
                 </div>
-
-                <div class="detail-row">
-                    <span class="detail-label">Artist</span>
-                    <span class="detail-value @(string.IsNullOrWhiteSpace(track.Artist) ? "empty" : "")">
-                        @(string.IsNullOrWhiteSpace(track.Artist) ? "—" : track.Artist)
+                <div class="td-detail-item">
+                    <span class="td-item-label">Sample Rate</span>
+                    <span class="td-item-value">
+                        @(track.AudioSampleRate.HasValue ? $"{track.AudioSampleRate:N0} Hz" : "—")
                     </span>
                 </div>
-
-                <div class="detail-row">
-                    <span class="detail-label">Album</span>
-                    <span class="detail-value @(string.IsNullOrWhiteSpace(track.Album) ? "empty" : "")">
-                        @(string.IsNullOrWhiteSpace(track.Album) ? "—" : track.Album)
+                <div class="td-detail-item">
+                    <span class="td-item-label">Channels</span>
+                    <span class="td-item-value">
+                        @if (track.AudioChannels.HasValue)
+                        {
+                            @($"{track.AudioChannels} {(track.AudioChannels == 2 ? "(Stereo)" : track.AudioChannels == 1 ? "(Mono)" : "(Multi-channel)")}")
+                        }
+                        else
+                        {
+                            <span>—</span>
+                        }
                     </span>
                 </div>
-
-                <div class="detail-row">
-                    <span class="detail-label">Track Number</span>
-                    <span class="detail-value @(track.Number == null ? "empty" : "")">
-                        @(track.Number?.ToString() ?? "—")
-                    </span>
-                </div>
-
-                <div class="detail-row">
-                    <span class="detail-label">Disc Number</span>
-                    <span class="detail-value @(track.DiscNumber == null ? "empty" : "")">
-                        @(track.DiscNumber?.ToString() ?? "—")
-                    </span>
-                </div>
-
-                <div class="detail-row">
-                    <span class="detail-label">Recorded Year</span>
-                    <span class="detail-value @(track.Recorded == null ? "empty" : "")">
-                        @(track.Recorded?.ToString() ?? "—")
-                    </span>
-                </div>
-
-                <div class="detail-row">
-                    <span class="detail-label">Length</span>
-                    <span class="detail-value @(string.IsNullOrWhiteSpace(track.Length) ? "empty" : "")">
-                        @(string.IsNullOrWhiteSpace(track.Length) ? "—" : track.Length)
-                    </span>
-                </div>
-
-                <div class="detail-row">
-                    <span class="detail-label">Duration</span>
-                    <span class="detail-value @(track.Duration == null ? "empty" : "")">
-                        @(track.Duration?.ToString(@"hh\:mm\:ss") ?? "—")
-                    </span>
-                </div>
-
-                <div class="detail-row">
-                    <span class="detail-label">Media</span>
-                    <span class="detail-value @(string.IsNullOrWhiteSpace(track.Media) ? "empty" : "")">
-                        @(string.IsNullOrWhiteSpace(track.Media) ? "—" : track.Media)
-                    </span>
-                </div>
-
-                <div class="detail-row">
-                    <span class="detail-label">Field</span>
-                    <span class="detail-value @(string.IsNullOrWhiteSpace(track.Field) ? "empty" : "")">
-                        @(string.IsNullOrWhiteSpace(track.Field) ? "—" : track.Field)
-                    </span>
-                </div>
-
-                <div class="detail-row">
-                    <span class="detail-label">Bits</span>
-                    <span class="detail-value @(track.Bits == null ? "empty" : "")">
-                        @(track.Bits?.ToString() ?? "—")
-                    </span>
-                </div>
-
-                <div class="detail-row">
-                    <span class="detail-label">Bit Rate</span>
-                    <span class="detail-value @(track.BitRate == null ? "empty" : "")">
-                        @(track.BitRate == null ? "—" : track.BitRate.ToString() + " kbps")
-                    </span>
-                </div>
-
-                <div class="detail-row">
-                    <span class="detail-label">Sample Rate</span>
-                    <span class="detail-value @(track.AudioSampleRate == null ? "empty" : "")">
-                        @(track.AudioSampleRate == null ? "—" : track.AudioSampleRate.ToString() + " Hz")
-                    </span>
-                </div>
-
-                <div class="detail-row">
-                    <span class="detail-label">Channels</span>
-                    <span class="detail-value @(track.AudioChannels == null ? "empty" : "")">
-                        @(track.AudioChannels?.ToString() ?? "—")
-                    </span>
-                </div>
-
-                <div class="detail-row">
-                    <span class="detail-label">Folder</span>
-                    <span class="detail-value @(string.IsNullOrWhiteSpace(track.Folder) ? "empty" : "")">
-                        @(string.IsNullOrWhiteSpace(track.Folder) ? "—" : track.Folder)
-                    </span>
-                </div>
-
             </div>
         </div>
-
-        @* Footer *@
-        <div class="track-card-footer">
-            <a asp-page="./Edit" asp-route-id="@track.TrackId" class="btn-action btn-primary-action">
-                ✏️ Edit
-            </a>
-            <a asp-page="./Index" class="btn-action btn-back">
-                ← Back to Tracks
-            </a>
-        </div>
-
     </div>
+
 </div>
+

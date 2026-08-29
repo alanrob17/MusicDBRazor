@@ -24,6 +24,7 @@ namespace MusicDB.Pages.Records
 
             var record = await _context.Records
                 .Include(r => r.Artist)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(r => r.RecordId == id);
 
             if (record is null)

@@ -1,77 +1,549 @@
-@page
+@page "{id:int?}"
 @model MusicDB.Pages.Records.DetailsModel
 
 @{
-    ViewData["Title"] = (Model.Record.Name ?? "Record") + " — Details";
     var record = Model.Record;
-    string initial = record.Name?.Length > 0 ? record.Name[0].ToString().ToUpper() : "R";
+    var artist = record.Artist;
+    var artistName = artist?.Name ?? "Unknown Artist";
+    var recordTitle = record.Name ?? "Unknown Record";
+    ViewData["Title"] = $"{recordTitle} — Details";
+    bool hasReview = !string.IsNullOrWhiteSpace(record.Review);
 }
 
+<style>
+/* ── Record Details page-scoped styles ──────────────────────── */
 
+/* Hero Banner */
+.rd-hero {
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 55%, #24243e 100%);
+    border-radius: 16px;
+    padding: 2.5rem 2.5rem 2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 40px rgba(15, 12, 41, 0.45);
+    position: relative;
+    overflow: hidden;
+}
 
-<div class="details-wrapper">
-    <div class="record-card">
-        <div class="record-card-header">
-            <div class="record-avatar">💿</div>
-            <div class="record-header-text">
-                <h1>@(record.Name ?? "Unknown Record")</h1>
-                <span class="record-subtitle">@(record.Artist?.Name ?? "Unknown Artist") @(record.Recorded.HasValue ? "· " + record.Recorded : "")</span>
-            </div>
+.rd-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg,
+        rgba(255,255,255,0) 30%,
+        rgba(255,255,255,0.04) 50%,
+        rgba(255,255,255,0) 70%);
+    background-size: 200% 100%;
+    animation: rd-shimmer 5s linear infinite;
+    pointer-events: none;
+}
+
+@@keyframes rd-shimmer {
+    from { background-position: 200% 0; }
+    to   { background-position: -200% 0; }
+}
+
+.rd-avatar-icon {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    box-shadow: 0 0 0 4px rgba(102,126,234,0.4), 0 8px 24px rgba(0,0,0,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.4rem;
+    flex-shrink: 0;
+    animation: rd-spin-slow 20s linear infinite;
+}
+
+@@keyframes rd-spin-slow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+.rd-hero-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.rd-breadcrumb {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #a78bfa;
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.rd-breadcrumb a {
+    color: #c4b5fd;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.rd-breadcrumb a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.rd-record-title {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.15;
+    margin: 0 0 0.5rem;
+    word-break: break-word;
+}
+
+.rd-record-subtitle {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+/* Badge pills */
+.rd-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.rd-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    backdrop-filter: blur(6px);
+}
+
+.rd-badge-year   { background: rgba(102,126,234,0.25); color: #c4b5fd; border: 1px solid rgba(102,126,234,0.4); }
+.rd-badge-discs  { background: rgba(16,185,129,0.2);   color: #6ee7b7; border: 1px solid rgba(16,185,129,0.35); }
+.rd-badge-field  { background: rgba(245,158,11,0.2);   color: #fcd34d; border: 1px solid rgba(245,158,11,0.35); }
+.rd-badge-length { background: rgba(239,68,68,0.2);    color: #fca5a5; border: 1px solid rgba(239,68,68,0.35); }
+.rd-badge-review { background: rgba(168,85,247,0.2);   color: #e9d5ff; border: 1px solid rgba(168,85,247,0.35); }
+
+/* ── Meta Info Strip ────────────────────────────────────────── */
+.rd-meta-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1px;
+    background: #e9ecef;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+
+.rd-meta-cell {
+    background: #fff;
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.rd-meta-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #9ca3af;
+}
+
+.rd-meta-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a2e;
+}
+
+.rd-meta-value a {
+    color: #4f46e5;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.rd-meta-value a:hover {
+    color: #3730a3;
+    text-decoration: underline;
+}
+
+.rd-meta-value.empty {
+    color: #d1d5db;
+    font-style: italic;
+    font-weight: 400;
+}
+
+/* ── Action Buttons ─────────────────────────────────────────── */
+.rd-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+/* ── Section Cards Grid ─────────────────────────────────────── */
+.rd-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.rd-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.rd-card-header {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #fff;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.rd-card-body {
+    padding: 1.25rem 1.5rem;
+    flex: 1;
+}
+
+.rd-detail-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.rd-detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f3f4f6;
+    gap: 1rem;
+    font-size: 0.92rem;
+}
+
+.rd-detail-item:last-child {
+    border-bottom: none;
+}
+
+.rd-item-label {
+    font-weight: 600;
+    color: #6b7280;
+    flex-shrink: 0;
+    min-width: 120px;
+}
+
+.rd-item-value {
+    color: #1f2937;
+    font-weight: 500;
+    text-align: right;
+    word-break: break-word;
+}
+
+.rd-item-value.code-path {
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.82rem;
+    background: #f3f4f6;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    color: #374151;
+    text-align: left;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.rd-item-value a {
+    color: #4f46e5;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.rd-item-value a:hover {
+    text-decoration: underline;
+}
+
+.rd-pill-tag {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    background: #e0e7ff;
+    color: #4338ca;
+}
+
+/* Review content */
+.rd-review-box {
+    color: #374151;
+    line-height: 1.75;
+    font-size: 0.95rem;
+}
+
+.rd-review-box p {
+    margin-bottom: 1rem;
+}
+
+.rd-review-box p:last-child {
+    margin-bottom: 0;
+}
+
+.rd-no-review {
+    color: #9ca3af;
+    font-style: italic;
+    text-align: center;
+    padding: 2.5rem 1rem;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@@media (max-width: 768px) {
+    .rd-hero {
+        flex-direction: column;
+        padding: 1.5rem 1.25rem;
+        gap: 1.25rem;
+    }
+
+    .rd-avatar-icon {
+        width: 68px;
+        height: 68px;
+        font-size: 1.8rem;
+    }
+
+    .rd-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rd-detail-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+
+    .rd-item-value {
+        text-align: left;
+    }
+}
+</style>
+
+@* ── Hero Banner ── *@
+<div class="rd-hero">
+    <div class="rd-avatar-icon">💿</div>
+    <div class="rd-hero-text">
+        <div class="rd-breadcrumb">
+            @if (artist != null)
+            {
+                <a asp-page="/Artists/ArtistSearch" asp-route-SelectedArtistId="@artist.ArtistId">@artistName</a>
+                <span>›</span>
+            }
+            <span>Record Details</span>
         </div>
 
-        <div class="record-card-body">
-            <div class="detail-grid">
+        <h1 class="rd-record-title">@recordTitle</h1>
 
-                <div class="detail-row">
-                    <span class="detail-label">Artist</span>
-                    <span class="detail-value">@(record.Artist?.Name ?? "—")</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Name</span>
-                    <span class="detail-value">@(record.Name ?? "—")</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Sub Title</span>
-                    <span class="detail-value @(string.IsNullOrWhiteSpace(record.SubTitle) ? "empty" : "")">@(string.IsNullOrWhiteSpace(record.SubTitle) ? "—" : record.SubTitle)</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Recorded</span>
-                    <span class="detail-value @(record.Recorded == null ? "empty" : "")">@(record.Recorded?.ToString() ?? "—")</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Discs</span>
-                    <span class="detail-value @(record.Discs == null ? "empty" : "")">@(record.Discs?.ToString() ?? "—")</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Field</span>
-                    <span class="detail-value @(string.IsNullOrWhiteSpace(record.Field) ? "empty" : "")">@(string.IsNullOrWhiteSpace(record.Field) ? "—" : record.Field)</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Length</span>
-                    <span class="detail-value @(string.IsNullOrWhiteSpace(record.Length) ? "empty" : "")">@(string.IsNullOrWhiteSpace(record.Length) ? "—" : record.Length)</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Cover Name</span>
-                    <span class="detail-value @(string.IsNullOrWhiteSpace(record.CoverName) ? "empty" : "")">@(string.IsNullOrWhiteSpace(record.CoverName) ? "—" : record.CoverName)</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Folder</span>
-                    <span class="detail-value @(string.IsNullOrWhiteSpace(record.Folder) ? "empty" : "")">@(string.IsNullOrWhiteSpace(record.Folder) ? "—" : record.Folder)</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Review</span>
-                    <div class="detail-value @(string.IsNullOrWhiteSpace(record.Review) ? "empty" : "")">
-                        @if (string.IsNullOrWhiteSpace(record.Review)) { <span>No review available.</span> }
-                        else { @Html.Raw(record.Review) }
-                    </div>
-                </div>
+        @if (!string.IsNullOrWhiteSpace(record.SubTitle))
+        {
+            <div class="rd-record-subtitle">@record.SubTitle</div>
+        }
 
-            </div>
-        </div>
-
-        <div class="record-card-footer">
-            <a asp-page="./Edit" asp-route-id="@record.RecordId" class="btn-action btn-edit">✏️ Edit</a>
-            <a asp-page="./Index" class="btn-action btn-back">← Back to Records</a>
+        <div class="rd-badges">
+            @if (record.Recorded.HasValue)
+            {
+                <span class="rd-badge rd-badge-year">🎙️ @record.Recorded</span>
+            }
+            @if (record.Discs.HasValue)
+            {
+                <span class="rd-badge rd-badge-discs">💿 @record.Discs @(record.Discs == 1 ? "Disc" : "Discs")</span>
+            }
+            @if (!string.IsNullOrWhiteSpace(record.Length))
+            {
+                <span class="rd-badge rd-badge-length">⏱️ @record.Length</span>
+            }
+            @if (!string.IsNullOrWhiteSpace(record.Field))
+            {
+                <span class="rd-badge rd-badge-field">🎸 @record.Field</span>
+            }
+            @if (hasReview)
+            {
+                <span class="rd-badge rd-badge-review">📝 Review Available</span>
+            }
         </div>
     </div>
 </div>
+
+@* ── Quick Meta Info Strip ── *@
+<div class="rd-meta-strip">
+    <div class="rd-meta-cell">
+        <span class="rd-meta-label">Artist</span>
+        <span class="rd-meta-value">
+            @if (artist != null)
+            {
+                <a asp-page="/Artists/ArtistSearch" asp-route-SelectedArtistId="@artist.ArtistId">@artistName</a>
+            }
+            else
+            {
+                @artistName
+            }
+        </span>
+    </div>
+    <div class="rd-meta-cell">
+        <span class="rd-meta-label">Recorded</span>
+        <span class="rd-meta-value @(record.Recorded == null ? "empty" : "")">
+            @(record.Recorded?.ToString() ?? "—")
+        </span>
+    </div>
+    <div class="rd-meta-cell">
+        <span class="rd-meta-label">Discs</span>
+        <span class="rd-meta-value @(record.Discs == null ? "empty" : "")">
+            @(record.Discs?.ToString() ?? "—")
+        </span>
+    </div>
+    <div class="rd-meta-cell">
+        <span class="rd-meta-label">Length</span>
+        <span class="rd-meta-value @(string.IsNullOrWhiteSpace(record.Length) ? "empty" : "")">
+            @(string.IsNullOrWhiteSpace(record.Length) ? "—" : record.Length)
+        </span>
+    </div>
+    <div class="rd-meta-cell">
+        <span class="rd-meta-label">Field</span>
+        <span class="rd-meta-value @(string.IsNullOrWhiteSpace(record.Field) ? "empty" : "")">
+            @(string.IsNullOrWhiteSpace(record.Field) ? "—" : record.Field)
+        </span>
+    </div>
+</div>
+
+@* ── Page Actions ── *@
+<div class="rd-actions">
+    <a asp-page="./RecordView" asp-route-id="@record.RecordId" class="btn-action btn-primary-action">💿 View Tracks &amp; Discs</a>
+    <a asp-page="./Edit" asp-route-id="@record.RecordId" class="btn-action btn-edit">✏️ Edit</a>
+    @if (artist != null)
+    {
+        <a asp-page="/Artists/ArtistSearch" asp-route-SelectedArtistId="@artist.ArtistId" class="btn-action btn-back">👤 View Artist</a>
+    }
+    <a asp-page="./Delete" asp-route-id="@record.RecordId" class="btn-action btn-delete">🗑️ Delete</a>
+    <a asp-page="./Index" class="btn-action btn-back">← Back to Records</a>
+</div>
+
+@* ── Detailed Two-Column Cards Grid ── *@
+<div class="rd-cards-grid">
+
+    @* Card 1: Record & Release Information *@
+    <div class="rd-card">
+        <div class="rd-card-header">
+            <span>📋</span>
+            <span>Album &amp; Release Info</span>
+        </div>
+        <div class="rd-card-body">
+            <div class="rd-detail-list">
+                <div class="rd-detail-item">
+                    <span class="rd-item-label">Album Title</span>
+                    <span class="rd-item-value">@recordTitle</span>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(record.SubTitle))
+                {
+                    <div class="rd-detail-item">
+                        <span class="rd-item-label">Sub Title</span>
+                        <span class="rd-item-value">@record.SubTitle</span>
+                    </div>
+                }
+                <div class="rd-detail-item">
+                    <span class="rd-item-label">Artist</span>
+                    <span class="rd-item-value">
+                        @if (artist != null)
+                        {
+                            <a asp-page="/Artists/ArtistSearch" asp-route-SelectedArtistId="@artist.ArtistId">@artistName</a>
+                        }
+                        else
+                        {
+                            @artistName
+                        }
+                    </span>
+                </div>
+                <div class="rd-detail-item">
+                    <span class="rd-item-label">Recorded Year</span>
+                    <span class="rd-item-value">
+                        @(record.Recorded.HasValue ? record.Recorded.Value.ToString() : "—")
+                    </span>
+                </div>
+                <div class="rd-detail-item">
+                    <span class="rd-item-label">Total Discs</span>
+                    <span class="rd-item-value">
+                        @if (record.Discs.HasValue)
+                        {
+                            <span class="rd-pill-tag">@record.Discs @(record.Discs == 1 ? "Disc" : "Discs")</span>
+                        }
+                        else
+                        {
+                            <span>—</span>
+                        }
+                    </span>
+                </div>
+                <div class="rd-detail-item">
+                    <span class="rd-item-label">Total Length</span>
+                    <span class="rd-item-value">@(string.IsNullOrWhiteSpace(record.Length) ? "—" : record.Length)</span>
+                </div>
+                <div class="rd-detail-item">
+                    <span class="rd-item-label">Field / Category</span>
+                    <span class="rd-item-value">@(string.IsNullOrWhiteSpace(record.Field) ? "—" : record.Field)</span>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(record.CoverName))
+                {
+                    <div class="rd-detail-item">
+                        <span class="rd-item-label">Cover File</span>
+                        <span class="rd-item-value code-path">@record.CoverName</span>
+                    </div>
+                }
+                @if (!string.IsNullOrWhiteSpace(record.Folder))
+                {
+                    <div class="rd-detail-item">
+                        <span class="rd-item-label">Folder</span>
+                        <span class="rd-item-value code-path" title="@record.Folder">@record.Folder</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    @* Card 2: Album Review / Notes *@
+    <div class="rd-card">
+        <div class="rd-card-header">
+            <span>📝</span>
+            <span>Album Review &amp; Notes</span>
+        </div>
+        <div class="rd-card-body">
+            @if (hasReview)
+            {
+                <div class="rd-review-box">
+                    @Html.Raw(record.Review)
+                </div>
+            }
+            else
+            {
+                <div class="rd-no-review">
+                    <p>ℹ️ No review or notes have been added for this record yet.</p>
+                    <a asp-page="./Edit" asp-route-id="@record.RecordId" class="btn-action btn-back" style="margin-top: 0.5rem;">✏️ Add Review</a>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>
+
