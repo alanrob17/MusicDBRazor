@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MusicDB.Data;
 using MusicDB.Data.Entities;
+using NuGet.Common;
+using Serilog.Core;
 
 namespace MusicDB.Pages.Records
 {
@@ -11,9 +13,12 @@ namespace MusicDB.Pages.Records
     {
         private readonly MusicDbContext _context;
 
-        public EditModel(MusicDbContext context)
+        private readonly ILogger<EditModel> _logger;
+
+        public EditModel(MusicDbContext context, ILogger<EditModel> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [BindProperty]
@@ -26,7 +31,9 @@ namespace MusicDB.Pages.Records
             if (id == null)
                 return NotFound();
 
-            var record = await _context.Records.FirstOrDefaultAsync(r => r.RecordId == id);
+            var record = await _context.Records
+                .Include(r => r.Artist)
+                .FirstOrDefaultAsync(r => r.RecordId == id);
 
             if (record is null)
                 return NotFound();
@@ -40,8 +47,12 @@ namespace MusicDB.Pages.Records
 
         public async Task<IActionResult> OnPostAsync()
         {
+            ModelState.Remove("Record.Artist");
+
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Model state is invalid. Returning to page with validation errors.");
+
                 ArtistList = new SelectList(
                     await _context.Artists.OrderBy(a => a.LastName).ThenBy(a => a.FirstName).ToListAsync(),
                     "ArtistId", "Name", Record.ArtistId);
@@ -53,6 +64,8 @@ namespace MusicDB.Pages.Records
             try
             {
                 await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Successfully updated Record with id {RecordId} ({RecordName})", Record.RecordId, Record.Name);
             }
             catch (DbUpdateConcurrencyException)
             {

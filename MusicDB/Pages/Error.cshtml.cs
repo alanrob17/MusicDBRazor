@@ -8,6 +8,13 @@ namespace MusicDB.Pages
     [IgnoreAntiforgeryToken]
     public class ErrorModel : PageModel
     {
+        private readonly ILogger<ErrorModel> _logger;
+
+        public ErrorModel(ILogger<ErrorModel> logger)
+        {
+            _logger = logger;
+        }
+
         public string? RequestId { get; set; }
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
@@ -15,7 +22,7 @@ namespace MusicDB.Pages
         public void OnGet()
         {
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+            _logger.LogError("Error page rendered for RequestId: {RequestId}, TraceIdentifier: {TraceIdentifier}", RequestId, HttpContext.TraceIdentifier);
         }
     }
-
 }
