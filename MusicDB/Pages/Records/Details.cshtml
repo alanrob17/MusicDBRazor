@@ -104,7 +104,7 @@
     <a asp-page="./Edit" asp-route-id="@record.RecordId" class="btn-action btn-edit">✏️ Edit</a>
     @if (artist != null)
     {
-        <a asp-page="/Artists/ArtistSearch" asp-route-SelectedArtistId="@artist.ArtistId" class="btn-action btn-back">👤 View Artist</a>
+        <a asp-page="/Artists/ArtistView" asp-route-id="@artist.ArtistId" class="btn-action btn-back">👤 View Artist</a>
     }
     <a asp-page="./Delete" asp-route-id="@record.RecordId" class="btn-action btn-delete">🗑️ Delete</a>
     <a asp-page="./Index" class="btn-action btn-back">← Back to Records</a>
