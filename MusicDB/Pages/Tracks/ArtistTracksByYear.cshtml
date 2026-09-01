@@ -1,0 +1,171 @@
+@page
+@model MusicDB.Pages.Tracks.ArtistTracksByYearModel
+
+<link rel="stylesheet" href="~/css/tracks.css" />
+
+@{
+    ViewData["Title"] = "Tracks by Year";
+
+    const int windowSize = 15;
+    int totalPages  = Model.TotalPages;
+    int currentPage = Model.CurrentPage;
+    int windowStart = ((currentPage - 1) / windowSize) * windowSize + 1;
+    int windowEnd   = Math.Min(windowStart + windowSize - 1, totalPages);
+    int prevWindowPage = windowStart - 1;
+    int nextWindowPage = windowEnd   + 1;
+
+    bool hasYear     = Model.HasYear;
+    bool hasArtist   = Model.HasArtist;
+    bool hasResults  = Model.Tracks.Count > 0;
+    bool yearEntered = !string.IsNullOrWhiteSpace(Model.YearString);
+}
+
+<div class="tracks-header">
+    <div>
+        <h1>📅 Tracks by Year</h1>
+        @if (hasYear && hasArtist && hasResults)
+        {
+            <span class="record-count">
+                @Model.TotalCount track@(Model.TotalCount != 1 ? "s" : "") recorded in @Model.YearString
+                matching "@Model.ArtistName" &nbsp;·&nbsp;
+                Page @currentPage of @totalPages
+            </span>
+        }
+        else if (hasYear && hasResults)
+        {
+            <span class="record-count">
+                @Model.TotalCount track@(Model.TotalCount != 1 ? "s" : "") recorded in @Model.YearString &nbsp;·&nbsp;
+                Page @currentPage of @totalPages
+            </span>
+        }
+        else if (hasYear && hasArtist)
+        {
+            <span class="record-count">No tracks found for @Model.YearString / "@Model.ArtistName"</span>
+        }
+        else if (hasYear)
+        {
+            <span class="record-count">No tracks found for @Model.YearString</span>
+        }
+        else if (yearEntered)
+        {
+            <span class="record-count" style="color: #dc3545;">
+                Please enter a valid year (1900–@DateTime.Now.Year)
+            </span>
+        }
+        else
+        {
+            <span class="record-count">Enter a Year to search</span>
+        }
+    </div>
+    <a asp-page="./Index" class="btn-back btn-action">← Back to Tracks</a>
+</div>
+
+<div class="search-container">
+    <form method="get" class="search-form">
+        <div class="search-fields-row">
+            <div class="search-input-wrapper">
+                <span class="search-icon">📅</span>
+                <input type="text" name="YearString" value="@Model.YearString"
+                       class="search-input" placeholder="Year (e.g. 1975)" />
+            </div>
+            <div class="search-input-wrapper">
+                <span class="search-icon">🎤</span>
+                <input type="text" name="ArtistName" value="@Model.ArtistName"
+                       class="search-input" placeholder="Artist name (optional)..." />
+            </div>
+            @if (yearEntered || hasArtist)
+            {
+                <a asp-page="./ArtistTracksByYear" class="clear-search-btn" title="Clear search">✖</a>
+            }
+        </div>
+        <button type="submit" class="btn-search">Search</button>
+    </form>
+</div>
+
+@if (hasYear)
+{
+    <div class="tracks-card">
+        <table class="tracks-table">
+            <thead>
+                <tr>
+                    <th>Artist</th>
+                    <th>Record</th>
+                    <th>Recorded</th>
+                    <th>Disc</th>
+                    <th>#</th>
+                    <th>Track Name</th>
+                    <th>Length</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (hasResults)
+                {
+                    @foreach (var item in Model.Tracks)
+                    {
+                        <tr>
+                            <td class="td-artist">@item.ArtistName</td>
+                            <td class="td-album"><a asp-page="/Records/GetRecord" asp-route-recordId="@item.RecordId">@item.RecordName</a></td>
+                            <td class="td-disc">@item.Recorded</td>
+                            <td class="td-disc">@item.DiscName</td>
+                            <td>@item.Number</td>
+                            <td class="td-name">@item.TrackName</td>
+                            <td class="td-length">@item.Length</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" style="text-align:center; padding: 2rem; color:#6c757d; font-style:italic;">
+                            No tracks found for "@Model.YearString"@(hasArtist ? $" / \"{Model.ArtistName}\"" : "").
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @* ── Pagination ──────────────────────────────────────────── *@
+    @if (totalPages > 1)
+    {
+        <p class="pagination-info">
+            Showing records @(((currentPage - 1) * MusicDB.Pages.Tracks.ArtistTracksByYearModel.PageSize) + 1)
+            – @(Math.Min(currentPage * MusicDB.Pages.Tracks.ArtistTracksByYearModel.PageSize, Model.TotalCount))
+            of @Model.TotalCount
+        </p>
+
+        <div class="pagination-bar">
+
+            @* ◀ Previous 15-page window *@
+            @if (windowStart > 1)
+            {
+                <a asp-page="./ArtistTracksByYear"
+                   asp-route-pageNumber="@prevWindowPage"
+                   asp-route-yearString="@Model.YearString"
+                   asp-route-artistName="@Model.ArtistName"
+                   class="page-btn nav-btn" title="Previous 15 pages">&#8249; Prev 15</a>
+            }
+
+            @* Numbered page buttons *@
+            @for (int p = windowStart; p <= windowEnd; p++)
+            {
+                <a asp-page="./ArtistTracksByYear"
+                   asp-route-pageNumber="@p"
+                   asp-route-yearString="@Model.YearString"
+                   asp-route-artistName="@Model.ArtistName"
+                   class="page-btn @(p == currentPage ? "active" : "")">@p</a>
+            }
+
+            @* Next 15-page window ▶ *@
+            @if (windowEnd < totalPages)
+            {
+                <a asp-page="./ArtistTracksByYear"
+                   asp-route-pageNumber="@nextWindowPage"
+                   asp-route-yearString="@Model.YearString"
+                   asp-route-artistName="@Model.ArtistName"
+                   class="page-btn nav-btn" title="Next 15 pages">Next 15 &#8250;</a>
+            }
+
+        </div>
+    }
+}

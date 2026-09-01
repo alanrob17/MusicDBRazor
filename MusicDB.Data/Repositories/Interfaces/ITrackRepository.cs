@@ -24,6 +24,13 @@ public interface ITrackRepository
     Task<(IReadOnlyList<GuestArtistTrack> Items, int TotalCount)> GetGuestArtistTracksAsync(string searchTerm, int page, int pageSize);
 
     /// <summary>
+    /// Executes up_GetTracksByYear with a required year and an optional artist-name filter,
+    /// applies in-memory paging, and returns the current page together with the total row count.
+    /// </summary>
+    Task<(IReadOnlyList<ArtistTracksByYear> Items, int TotalCount)> GetTracksByYearAsync(
+        int year, string? artistName, int page, int pageSize);
+
+    /// <summary>
     /// Searches <c>Track.Name</c> for a partial match using LINQ, applies
     /// in-memory paging, and returns the current page together with the total row count.
     /// </summary>

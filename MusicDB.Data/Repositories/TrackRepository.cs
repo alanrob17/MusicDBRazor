@@ -106,4 +106,26 @@ public class TrackRepository : ITrackRepository
 
         return (items, totalCount);
     }
+
+    /// <inheritdoc/>
+    public async Task<(IReadOnlyList<ArtistTracksByYear> Items, int TotalCount)> GetTracksByYearAsync(
+        int year, string? artistName, int page, int pageSize)
+    {
+        var pYear       = new SqlParameter("@Recorded",   year);
+        var pArtistName = new SqlParameter("@ArtistName", (object?)artistName ?? DBNull.Value);
+
+        var all = await _context.Database
+            .SqlQuery<ArtistTracksByYear>($"EXEC up_GetTracksByYear @Recorded={pYear}, @ArtistName={pArtistName}")
+            .ToListAsync();
+
+        int totalCount = all.Count;
+
+        var items = all
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList()
+            .AsReadOnly();
+
+        return (items, totalCount);
+    }
 }

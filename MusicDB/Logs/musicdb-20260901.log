@@ -1,0 +1,83 @@
+2026-09-01 16:31:04.075 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (87ms) [Parameters=[@Recorded='?' (DbType = Int32), @ArtistName='?'], CommandType='"Text"', CommandTimeout='30']
+EXEC up_GetTracksByYear @Recorded=@Recorded, @ArtistName=@ArtistName
+2026-09-01 16:31:04.120 +10:00 [ERR] (Microsoft.EntityFrameworkCore.Query) An exception occurred while iterating over the results of a query for context type 'MusicDB.Data.MusicDbContext'.
+System.InvalidOperationException: The required column 'TrackName' was not present in the results of a 'FromSql' operation.
+   at Microsoft.EntityFrameworkCore.Query.Internal.FromSqlQueryingEnumerable`1.BuildIndexMap(IReadOnlyList`1 columnNames, DbDataReader dataReader)
+   at Microsoft.EntityFrameworkCore.Query.Internal.FromSqlQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.FromSqlQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+System.InvalidOperationException: The required column 'TrackName' was not present in the results of a 'FromSql' operation.
+   at Microsoft.EntityFrameworkCore.Query.Internal.FromSqlQueryingEnumerable`1.BuildIndexMap(IReadOnlyList`1 columnNames, DbDataReader dataReader)
+   at Microsoft.EntityFrameworkCore.Query.Internal.FromSqlQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.FromSqlQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-09-01 16:31:04.145 +10:00 [ERR] (Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware) An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The required column 'TrackName' was not present in the results of a 'FromSql' operation.
+   at Microsoft.EntityFrameworkCore.Query.Internal.FromSqlQueryingEnumerable`1.BuildIndexMap(IReadOnlyList`1 columnNames, DbDataReader dataReader)
+   at Microsoft.EntityFrameworkCore.Query.Internal.FromSqlQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.FromSqlQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at MusicDB.Data.Repositories.TrackRepository.GetTracksByYearAsync(Int32 year, String artistName, Int32 page, Int32 pageSize) in D:\Projects\MusicDBRazor\MusicDB.Data\Repositories\TrackRepository.cs:line 117
+   at MusicDB.Pages.Tracks.ArtistTracksByYearModel.OnGetAsync(Int32 pageNumber) in D:\Projects\MusicDBRazor\MusicDB\Pages\Tracks\ArtistTracksByYear.cshtml.cs:line 47
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.ExecutorFactory.NonGenericTaskHandlerMethod.Execute(Object receiver, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeHandlerMethodAsync()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeNextPageFilterAsync()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.Rethrow(PageHandlerExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeInnerFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-09-01 16:32:51.905 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (25ms) [Parameters=[@Recorded='?' (DbType = Int32), @ArtistName='?'], CommandType='"Text"', CommandTimeout='30']
+EXEC up_GetTracksByYear @Recorded=@Recorded, @ArtistName=@ArtistName
+2026-09-01 16:32:57.420 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (23ms) [Parameters=[@Recorded='?' (DbType = Int32), @ArtistName='?'], CommandType='"Text"', CommandTimeout='30']
+EXEC up_GetTracksByYear @Recorded=@Recorded, @ArtistName=@ArtistName
+2026-09-01 16:33:00.270 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (19ms) [Parameters=[@Recorded='?' (DbType = Int32), @ArtistName='?'], CommandType='"Text"', CommandTimeout='30']
+EXEC up_GetTracksByYear @Recorded=@Recorded, @ArtistName=@ArtistName
+2026-09-01 16:33:07.915 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (19ms) [Parameters=[@Recorded='?' (DbType = Int32), @ArtistName='?' (Size = 5)], CommandType='"Text"', CommandTimeout='30']
+EXEC up_GetTracksByYear @Recorded=@Recorded, @ArtistName=@ArtistName
+2026-09-01 16:33:26.748 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (17ms) [Parameters=[@Recorded='?' (DbType = Int32), @ArtistName='?' (Size = 9)], CommandType='"Text"', CommandTimeout='30']
+EXEC up_GetTracksByYear @Recorded=@Recorded, @ArtistName=@ArtistName
+2026-09-01 16:33:30.370 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (17ms) [Parameters=[@Recorded='?' (DbType = Int32), @ArtistName='?' (Size = 9)], CommandType='"Text"', CommandTimeout='30']
+EXEC up_GetTracksByYear @Recorded=@Recorded, @ArtistName=@ArtistName
+2026-09-01 16:33:33.759 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (18ms) [Parameters=[@Recorded='?' (DbType = Int32), @ArtistName='?' (Size = 9)], CommandType='"Text"', CommandTimeout='30']
+EXEC up_GetTracksByYear @Recorded=@Recorded, @ArtistName=@ArtistName
+2026-09-01 16:33:37.172 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (18ms) [Parameters=[@Recorded='?' (DbType = Int32), @ArtistName='?' (Size = 9)], CommandType='"Text"', CommandTimeout='30']
+EXEC up_GetTracksByYear @Recorded=@Recorded, @ArtistName=@ArtistName
+2026-09-01 16:33:42.049 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (4ms) [Parameters=[@recordId='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[RecordId], [r].[ArtistId], [r].[CoverName], [r].[Discs], [r].[Field], [r].[Folder], [r].[Length], [r].[Name], [r].[Recorded], [r].[Review], [r].[SubTitle], [a].[ArtistId], [a].[Biography], [a].[FirstName], [a].[Folder], [a].[LastName], [a].[Name], [a].[RecordArtistId]
+FROM [Record] AS [r]
+INNER JOIN [Artist] AS [a] ON [r].[ArtistId] = [a].[ArtistId]
+WHERE [r].[RecordId] = @recordId
+2026-09-01 16:33:42.116 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (15ms) [Parameters=[@recordId='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [d].[DiscId], [d].[DiscNumber], [d].[Duration], [d].[Folder], [d].[Length], [d].[Name], [d].[RecordId], [d].[SubTitle], [t].[TrackId], [t].[Album], [t].[Artist], [t].[AudioChannels], [t].[AudioSampleRate], [t].[BitRate], [t].[Bits], [t].[DiscId], [t].[DiscNumber], [t].[Duration], [t].[Field], [t].[Folder], [t].[Length], [t].[Media], [t].[Name], [t].[Number], [t].[Recorded], [t].[Title]
+FROM [Disc] AS [d]
+LEFT JOIN [Track] AS [t] ON [d].[DiscId] = [t].[DiscId]
+WHERE [d].[RecordId] = @recordId
+ORDER BY [d].[DiscNumber], [d].[DiscId]
+2026-09-01 16:34:04.507 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (17ms) [Parameters=[@Recorded='?' (DbType = Int32), @ArtistName='?' (Size = 9)], CommandType='"Text"', CommandTimeout='30']
+EXEC up_GetTracksByYear @Recorded=@Recorded, @ArtistName=@ArtistName
+2026-09-01 16:34:07.326 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (20ms) [Parameters=[@Recorded='?' (DbType = Int32), @ArtistName='?' (Size = 9)], CommandType='"Text"', CommandTimeout='30']
+EXEC up_GetTracksByYear @Recorded=@Recorded, @ArtistName=@ArtistName
+2026-09-01 16:34:10.886 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (21ms) [Parameters=[@Recorded='?' (DbType = Int32), @ArtistName='?' (Size = 9)], CommandType='"Text"', CommandTimeout='30']
+EXEC up_GetTracksByYear @Recorded=@Recorded, @ArtistName=@ArtistName
+2026-09-01 16:34:13.573 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (19ms) [Parameters=[@Recorded='?' (DbType = Int32), @ArtistName='?' (Size = 9)], CommandType='"Text"', CommandTimeout='30']
+EXEC up_GetTracksByYear @Recorded=@Recorded, @ArtistName=@ArtistName
+2026-09-01 16:34:29.834 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (19ms) [Parameters=[@Recorded='?' (DbType = Int32), @ArtistName='?'], CommandType='"Text"', CommandTimeout='30']
+EXEC up_GetTracksByYear @Recorded=@Recorded, @ArtistName=@ArtistName
+2026-09-01 16:35:16.672 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (24ms) [Parameters=[@Recorded='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+EXEC up_GetBriefTrackListByYear @Recorded=@Recorded
+2026-09-01 16:35:21.393 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (20ms) [Parameters=[@Recorded='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+EXEC up_GetBriefTrackListByYear @Recorded=@Recorded
+2026-09-01 16:35:24.927 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (19ms) [Parameters=[@Recorded='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+EXEC up_GetBriefTrackListByYear @Recorded=@Recorded
+2026-09-01 16:35:29.618 +10:00 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand (18ms) [Parameters=[@Recorded='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+EXEC up_GetBriefTrackListByYear @Recorded=@Recorded
