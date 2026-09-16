@@ -22,7 +22,7 @@ public class ArtistTracksByYearModel : PageModel
     [BindProperty(SupportsGet = true)]
     public string? ArtistName { get; set; }
 
-    public IReadOnlyList<ArtistTracksByYear> Tracks { get; set; } = [];
+    public IReadOnlyList<BriefRecord> Records { get; set; } = [];
     public int CurrentPage { get; set; } = 1;
     public int TotalCount { get; set; }
     public int TotalPages => (int)Math.Ceiling(TotalCount / (double)PageSize);
@@ -44,8 +44,7 @@ public class ArtistTracksByYearModel : PageModel
 
         CurrentPage = Math.Max(1, pageNumber);
 
-        var (items, totalCount) = await _trackRepository.GetTracksByYearAsync(
-            year, ArtistName, CurrentPage, PageSize);
+        var (items, totalCount) = await _trackRepository.GetRecordsByYearAsync(year, ArtistName, CurrentPage, PageSize);
 
         TotalCount = totalCount;
 
@@ -53,10 +52,9 @@ public class ArtistTracksByYearModel : PageModel
         if (CurrentPage > TotalPages && TotalPages > 0)
         {
             CurrentPage = TotalPages;
-            (items, _) = await _trackRepository.GetTracksByYearAsync(
-                year, ArtistName, CurrentPage, PageSize);
+            (items, _) = await _trackRepository.GetRecordsByYearAsync(year, ArtistName, CurrentPage, PageSize);
         }
 
-        Tracks = items;
+        Records = items;
     }
 }

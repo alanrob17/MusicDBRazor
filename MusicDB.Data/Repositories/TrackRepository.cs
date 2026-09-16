@@ -49,6 +49,25 @@ public class TrackRepository : ITrackRepository
         return (items, totalCount);
     }
 
+    public async Task<(IReadOnlyList<BriefRecord> Items, int TotalCount)> GetGetBriefRecordListByYearAsync(string searchTerm, int page, int pageSize)
+    {
+        var param = new SqlParameter("@Recorded", searchTerm ?? string.Empty);
+
+        var all = await _context.Database
+            .SqlQuery<BriefRecord>($"EXEC up_GetBriefRecordListByYear @Recorded={param}")
+            .ToListAsync();
+
+        int totalCount = all.Count;
+
+        var items = all
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList()
+            .AsReadOnly();
+
+        return (items, totalCount);
+    }
+
     /// <inheritdoc/>
     public async Task<(IReadOnlyList<GuestArtistTrack> Items, int TotalCount)> GetGuestArtistTracksAsync(string searchTerm, int page, int pageSize)
     {
@@ -116,6 +135,28 @@ public class TrackRepository : ITrackRepository
 
         var all = await _context.Database
             .SqlQuery<ArtistTracksByYear>($"EXEC up_GetTracksByYear @Recorded={pYear}, @ArtistName={pArtistName}")
+            .ToListAsync();
+
+        int totalCount = all.Count;
+
+        var items = all
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList()
+            .AsReadOnly();
+
+        return (items, totalCount);
+    }
+
+    /// <inheritdoc/>
+    public async Task<(IReadOnlyList<BriefRecord> Items, int TotalCount)> GetRecordsByYearAsync(
+        int year, string? artistName, int page, int pageSize)
+    {
+        var pYear = new SqlParameter("@Recorded", year);
+        var pArtistName = new SqlParameter("@ArtistName", (object?)artistName ?? DBNull.Value);
+
+        var all = await _context.Database
+            .SqlQuery<BriefRecord>($"EXEC up_GetRecordsByYear @Recorded={pYear}, @ArtistName={pArtistName}")
             .ToListAsync();
 
         int totalCount = all.Count;

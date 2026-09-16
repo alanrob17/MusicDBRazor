@@ -18,6 +18,11 @@ public interface ITrackRepository
     Task<(IReadOnlyList<BriefTrack> Items, int TotalCount)> GetGetBriefTrackListByYearAsync(string searchTerm, int page, int pageSize);
 
     /// <summary>
+    /// Executes up_GetBriefRecordListByYear and returns the brief record list for a specific year.
+    /// </summary>
+    Task<(IReadOnlyList<BriefRecord> Items, int TotalCount)> GetGetBriefRecordListByYearAsync(string searchTerm, int page, int pageSize);
+
+    /// <summary>
     /// Executes adm_GetArtistGuestTracks with the supplied search term, applies
     /// in-memory paging, and returns the current page together with the total row count.
     /// </summary>
@@ -28,6 +33,13 @@ public interface ITrackRepository
     /// applies in-memory paging, and returns the current page together with the total row count.
     /// </summary>
     Task<(IReadOnlyList<ArtistTracksByYear> Items, int TotalCount)> GetTracksByYearAsync(
+        int year, string? artistName, int page, int pageSize);
+    
+    /// <summary>
+    /// Executes up_GetRecordsByYear with a required year and an optional artist-name filter,
+    /// applies in-memory paging, and returns the current page together with the total row count.
+    /// </summary>
+    Task<(IReadOnlyList<BriefRecord> Items, int TotalCount)> GetRecordsByYearAsync(
         int year, string? artistName, int page, int pageSize);
 
     /// <summary>

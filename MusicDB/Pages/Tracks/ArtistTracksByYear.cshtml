@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="~/css/tracks.css" />
 
 @{
-    ViewData["Title"] = "Tracks by Year";
+    ViewData["Title"] = "Records by Year";
 
     const int windowSize = 15;
     int totalPages  = Model.TotalPages;
@@ -16,13 +16,13 @@
 
     bool hasYear     = Model.HasYear;
     bool hasArtist   = Model.HasArtist;
-    bool hasResults  = Model.Tracks.Count > 0;
+    bool hasResults  = Model.Records.Count > 0;
     bool yearEntered = !string.IsNullOrWhiteSpace(Model.YearString);
 }
 
 <div class="tracks-header">
     <div>
-        <h1>📅 Tracks by Year</h1>
+        <h1>📅 Records by Year</h1>
         @if (hasYear && hasArtist && hasResults)
         {
             <span class="record-count">
@@ -57,7 +57,7 @@
             <span class="record-count">Enter a Year to search</span>
         }
     </div>
-    <a asp-page="./Index" class="btn-back btn-action">← Back to Tracks</a>
+    <a asp-page="/Records/Index" class="btn-back btn-action">← Back to Records</a>
 </div>
 
 <div class="search-container">
@@ -92,23 +92,19 @@
                     <th>Record</th>
                     <th>Recorded</th>
                     <th>Disc</th>
-                    <th>#</th>
-                    <th>Track Name</th>
                     <th>Length</th>
                 </tr>
             </thead>
             <tbody>
                 @if (hasResults)
                 {
-                    @foreach (var item in Model.Tracks)
+                    @foreach (var item in Model.Records)
                     {
                         <tr>
                             <td class="td-artist">@item.ArtistName</td>
-                            <td class="td-album"><a asp-page="/Records/GetRecord" asp-route-recordId="@item.RecordId">@item.RecordName</a></td>
+                            <td class="td-album"><a asp-page="/Records/GetRecord" asp-route-recordId="@item.RecordId">@item.Album</a></td>
                             <td class="td-disc">@item.Recorded</td>
                             <td class="td-disc">@item.DiscName</td>
-                            <td>@item.Number</td>
-                            <td class="td-name">@item.TrackName</td>
                             <td class="td-length">@item.Length</td>
                         </tr>
                     }
