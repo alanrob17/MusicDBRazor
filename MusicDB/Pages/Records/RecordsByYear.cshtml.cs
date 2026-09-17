@@ -3,17 +3,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using MusicDB.Data.Models;
 using MusicDB.Data.Repositories.Interfaces;
 
-namespace MusicDB.Pages.Tracks;
+namespace MusicDB.Pages.Records;
 
-public class ArtistTracksByYearModel : PageModel
+public class RecordsByYearModel : PageModel
 {
-    private readonly ITrackRepository _trackRepository;
+    private readonly IRecordRepository _recordRepository;
 
     public const int PageSize = 20;
 
-    public ArtistTracksByYearModel(ITrackRepository trackRepository)
+    public RecordsByYearModel(IRecordRepository recordRepository)
     {
-        _trackRepository = trackRepository;
+        _recordRepository = recordRepository;
     }
 
     [BindProperty(SupportsGet = true)]
@@ -44,7 +44,7 @@ public class ArtistTracksByYearModel : PageModel
 
         CurrentPage = Math.Max(1, pageNumber);
 
-        var (items, totalCount) = await _trackRepository.GetRecordsByYearAsync(year, ArtistName, CurrentPage, PageSize);
+        var (items, totalCount) = await _recordRepository.GetRecordsByYearAsync(year, ArtistName, CurrentPage, PageSize);
 
         TotalCount = totalCount;
 
@@ -52,7 +52,7 @@ public class ArtistTracksByYearModel : PageModel
         if (CurrentPage > TotalPages && TotalPages > 0)
         {
             CurrentPage = TotalPages;
-            (items, _) = await _trackRepository.GetRecordsByYearAsync(year, ArtistName, CurrentPage, PageSize);
+            (items, _) = await _recordRepository.GetRecordsByYearAsync(year, ArtistName, CurrentPage, PageSize);
         }
 
         Records = items;

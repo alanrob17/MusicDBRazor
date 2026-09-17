@@ -13,5 +13,7 @@ namespace MusicDB.Data.Repositories.Interfaces
         /// </summary>
         Task<(IReadOnlyList<FaultyRecordFieldTag> Items, int TotalCount)> GetFaultyFieldAlbumsAsync(int page, int pageSize);
 
+        Task<(IReadOnlyList<BriefRecord> Items, int TotalCount)> GetRecordsByYearAsync(
+            int year, string? artistName, int page, int pageSize);
     }
 }

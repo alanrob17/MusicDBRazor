@@ -36,13 +36,6 @@ public interface ITrackRepository
         int year, string? artistName, int page, int pageSize);
     
     /// <summary>
-    /// Executes up_GetRecordsByYear with a required year and an optional artist-name filter,
-    /// applies in-memory paging, and returns the current page together with the total row count.
-    /// </summary>
-    Task<(IReadOnlyList<BriefRecord> Items, int TotalCount)> GetRecordsByYearAsync(
-        int year, string? artistName, int page, int pageSize);
-
-    /// <summary>
     /// Searches <c>Track.Name</c> for a partial match using LINQ, applies
     /// in-memory paging, and returns the current page together with the total row count.
     /// </summary>

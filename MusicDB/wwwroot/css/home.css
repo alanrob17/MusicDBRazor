@@ -1,0 +1,192 @@
+/* ============================================================
+   home.css  -  Styles for the Index (Home) page
+   ============================================================ */
+
+/* ?? Google Font ??????????????????????????????????????????? */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* -- Hero banner --------------------------------------------- */
+.home-hero {
+    padding: 2.5rem 2.5rem 2rem;
+    margin-bottom: 0rem;
+    text-align: center;
+}
+
+.home-hero h1 {
+    margin: 0 0 1rem;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #1a1a2e;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+}
+
+/* Accent the "Music" prefix */
+.home-hero h1 span {
+    background: linear-gradient(90deg, #667eea, #a78bfa, #667eea);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: hero-shimmer 4s linear infinite;
+}
+
+@keyframes hero-shimmer {
+    0%   { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
+/* Live clock */
+.clock-display {
+    font-size: 2.6rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.06em;
+    color: #667eea;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+}
+
+/* Date line */
+.date-display {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #6c757d;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+
+/* -- Home card (wraps the navigation table) ------------------- */
+.home-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 0px solid rgba(102, 126, 234, 0.25);
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15), 0 2px 8px rgba(0, 0, 0, 0.06);
+    padding: 0.075rem;
+    margin: 0 auto 2rem;
+    max-width: 700px;
+}
+
+
+/* -- Home navigation table ------------------------------------ */
+.home-table {
+    /* width: 100%; */
+    max-width: 760px;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.9rem;
+    border: 1.5px solid rgba(102, 126, 234, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Header row */
+.home-table thead {
+    background: linear-gradient(135deg, #eef0fd, #f0eeff);
+    color: #3d3a6e;
+}
+
+.home-table thead th {
+    padding: 0.85rem 1.25rem;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    border-bottom: 1.5px solid rgba(102, 126, 234, 0.2);
+}
+
+/* Round the top-left and top-right header corners */
+.home-table thead th:first-child { border-radius: 10px 0 0 0; }
+.home-table thead th:last-child  { border-radius: 0 10px 0 0; }
+
+/* Body rows */
+.home-table tbody tr {
+    transition: background 0.15s;
+}
+
+.home-table tbody td {
+    border-bottom: 1px solid #f1f3f5;
+}
+
+.home-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Round the bottom-left and bottom-right corners */
+.home-table tbody tr:last-child td:first-child { border-radius: 0 0 0 10px; }
+.home-table tbody tr:last-child td:last-child  { border-radius: 0 0 10px 0; }
+
+.home-table tbody tr:hover {
+    background: #f8f5ff;
+}
+
+.home-table tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+.home-table tbody tr:nth-child(even):hover {
+    background: #f8f5ff;
+}
+
+/* Cells */
+.home-table td {
+    padding: 0.65rem 1.25rem;
+    color: #343a40;
+    vertical-align: middle;
+}
+
+/* Link column */
+.home-table td:first-child {
+    white-space: nowrap;
+    width: 220px;
+}
+
+.home-table td:first-child a {
+    font-weight: 600;
+    color: #667eea;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.home-table td:first-child a:hover {
+    color: #764ba2;
+    text-decoration: underline;
+}
+
+/* Description column */
+.home-table td:last-child {
+    color: #6c757d;
+}
+
+/* Visual spacer rows */
+.home-table tr.spacer-row td {
+    padding: 0;
+    height: 6px;
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.06), transparent);
+    border-bottom: none;
+}
+
+.home-table tr.spacer-row:hover {
+    background: transparent;
+}
+
+/* -- Responsive ----------------------------------------------- */
+@media (max-width: 600px) {
+    .home-hero {
+        padding: 1.75rem 1.25rem 1.5rem;
+        border-radius: 10px;
+    }
+
+    .home-hero h1 {
+        font-size: 1.65rem;
+    }
+
+    .clock-display {
+        font-size: 2rem;
+    }
+
+    .home-table td:first-child {
+        width: auto;
+    }
+}

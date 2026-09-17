@@ -4,6 +4,223 @@
     ViewData["Title"] = "MusicDB";
 }
 
-<div class="text-center">
-    <h1 class="display-4">MusicDB</h1>
+<div class="home-hero">
+    <h1><span>Music</span>DB Management System</h1>
+    <div class="clock-display" id="clock">--:--</div>
+    <div class="date-display" id="date-display"></div>
 </div>
+
+<div class="home-card">
+    <table class="home-table mb-1">
+        <thead>
+            <tr>
+                <th>Option</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="Artists/">Artists</a></td>
+                <td>View all Artists, organised by artist names.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/">Records</a></td>
+                <td>View all Records, organised by artist and recorded date.</td>
+            </tr>
+            <tr>
+                <td><a href="Tracks/">Tracks </a></td>
+                <td>View all Tracks, organised by artist and recorded date.</td>
+            </tr>
+            <tr><td colspan="2"><strong>Search Options</strong></td></tr>
+            <tr>
+                <td><a href="Artists/ArtistSearch">Search for Artist</a></td>
+                <td>View a selected artists records.</td>
+            </tr>
+            <tr>
+                <td><a href="Tracks/GetGuestArtist">Guest Artist Search</a></td>
+                <td>View compilations and guest appearances of a selected artist.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/RecordSearch">Search for a Record</a></td>
+                <td>View a selected record's track listing.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/RecordsByYear">Search Records by Year</a></td>
+                <td>View all records from a specific year.</td>
+            </tr>
+            <tr>
+                <td><a href="Tracks/GetTrackByName">Track Name Search</a></td>
+                <td>Search for a particular track title.</td>
+            </tr>
+            <tr><td colspan="2"><strong>Statistics</strong></td></tr>
+            <tr>
+                <td><a href="Statistics/TotalTime">Total Music Time</a></td>
+                <td>View the total time of all music in the collection.</td>
+            </tr>
+            <tr>
+                <td><a href="/Statistics/Totals">Artist Totals</a></td>
+                <td>View statistics for each artist.</td>
+            </tr>
+            <tr><td colspan="2"><strong>Maintenance Tasks</strong></td></tr>
+            <tr>
+                <td><a href="Artists/ArtistList">Record List</a></td>
+                <td>View a combined list of all Artists and Records.</td>
+            </tr>
+            <tr>
+                <td><a href="/Records/RecordReviews">Record Reviews</a></td>
+                <td>View all record reviews.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/GetRecords/2022">View 2022 Titles</a></td>
+                <td>View all albums bought in 2022.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/GetRecords/2021">View 2021 Titles</a></td>
+                <td>View all albums bought in 2021.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/GetRecords/2020">View 2020 Titles</a></td>
+                <td>View all albums bought in 2020.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/GetRecords/2019">View 2019 Titles</a></td>
+                <td>View all albums bought in 2019.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/GetRecords/2018">View 2018 Titles</a></td>
+                <td>View all albums bought in 2018.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/GetRecords/2017">View 2017 Titles</a></td>
+                <td>View all albums bought in 2017.</td>
+            </tr>
+            <tr class="spacer-row"><td colspan="2"></td></tr>
+
+            <tr>
+                <td><a href="Records/Recorded">Year Recorded</a></td>
+                <td>View all albums recorded in a particular year.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/GetRecords/1111">View Four Star</a></td>
+                <td>View all albums with an indispensable (★★★★) rating.</td>
+            </tr>
+            <tr class="spacer-row"><td colspan="2"></td></tr>
+
+            <tr>
+                <td><a href="Records/GetRecords/Rock">Rock</a></td>
+                <td>View all Rock albums.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/GetRecords/Blues">Blues</a></td>
+                <td>View all Blues albums.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/GetRecords/Jazz">Jazz</a></td>
+                <td>View all Jazz albums.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/GetRecords/Classical">Classical</a></td>
+                <td>View all Classical albums.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/GetRecords/Soundtrack">Soundtrack</a></td>
+                <td>View all Soundtrack albums.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/GetRecords/Country">Country</a></td>
+                <td>View all Country albums.</td>
+            </tr>
+            <tr class="spacer-row"><td colspan="2"></td></tr>
+
+            <tr>
+                <td><a href="Records/GetRecords/Rockdesc">Rock by Date</a></td>
+                <td>View all Rock albums ordered by Recorded date.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/GetRecords/Bluesdesc">Blues by Date</a></td>
+                <td>View all Blues albums ordered by Recorded date.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/GetRecords/Jazzdesc">Jazz by Date</a></td>
+                <td>View all Jazz albums ordered by Recorded date.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/GetRecords/Classicaldesc">Classical by Date</a></td>
+                <td>View all Classical albums ordered by Recorded date.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/GetRecords/Soundtrackdesc">Soundtrack by Date</a></td>
+                <td>View all Soundtrack albums ordered by Recorded date.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/GetRecords/Countrydesc">Country by Date</a></td>
+                <td>View all Country albums ordered by Recorded date.</td>
+            </tr>
+            <tr class="spacer-row"><td colspan="2"></td></tr>
+
+            <tr>
+                <td><a href="Artists/Create">Add New Artist</a></td>
+                <td>Add a new artist to the RecordDB.</td>
+            </tr>
+            <tr>
+                <td><a href="Artists/EditArtist">Edit Artist</a></td>
+                <td>Edit an existing artist in the RecordDB.</td>
+            </tr>
+            <tr>
+                <td><a href="Artists/DeleteArtist">Delete Artist</a></td>
+                <td>Delete an artist from the RecordDB.</td>
+            </tr>
+            <tr class="spacer-row"><td colspan="2"></td></tr>
+
+            <tr>
+                <td><a href="Records/Create">Add New Record</a></td>
+                <td>Add a new record to the RecordDB.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/EditRecord">Edit Record</a></td>
+                <td>Edit an existing record in the RecordDB.</td>
+            </tr>
+            <tr>
+                <td><a href="Records/DeleteRecord">Delete Record</a></td>
+                <td>Delete an artist's record from the RecordDB.</td>
+            </tr>
+            <tr class="spacer-row"><td colspan="2"></td></tr>
+
+            <tr>
+                <td><a href="Records/TotalCosts">Artist Totals</a></td>
+                <td>Calculate total discs and costs for each artist.</td>
+            </tr>
+            <tr>
+                <td><a href="Statistics">Statistics</a></td>
+                <td>View collection statistics for the RecordDB.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        (function() {
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'];
+
+            function pad(n) { return n < 10 ? '0' + n : n; }
+
+            function tick() {
+                const now = new Date();
+                let h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
+                const ampm = h >= 12 ? 'pm' : 'am';
+                h = h % 12 || 12;
+                document.getElementById('clock').textContent =
+                    pad(h) + ':' + pad(m) + ':' + pad(s) + ' ' + ampm;
+                document.getElementById('date-display').textContent =
+                    days[now.getDay()] + ', ' + now.getDate() + ' ' +
+                    months[now.getMonth()] + ' ' + now.getFullYear();
+            }
+
+            tick();
+            setInterval(tick, 1000);
+        })();
+    </script>
+}
