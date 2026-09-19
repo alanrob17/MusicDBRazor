@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Azure;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MusicDB.Data.Models;
 using MusicDB.Data.Repositories.Interfaces;
@@ -44,6 +45,23 @@ namespace MusicDB.Data.Repositories
             var all = await _context.Database
                 .SqlQuery<BriefRecord>($"EXEC up_GetRecordsByYear @Recorded={pYear}, @ArtistName={pArtistName}")
                 .ToListAsync();
+
+            int totalCount = all.Count;
+
+            var items = all
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList()
+                .AsReadOnly();
+
+            return (items, totalCount);
+        }
+
+        public async Task<(IReadOnlyList<SingleTrackAlbum> items, int TotalCount)> GetSingleTrackAlbumsAsync(int page, int pageSize)
+        {
+            var all = await _context.Database
+                        .SqlQuery<SingleTrackAlbum>($"EXEC adm_GetAlbumsWithOneTrack")
+                        .ToListAsync();
 
             int totalCount = all.Count;
 

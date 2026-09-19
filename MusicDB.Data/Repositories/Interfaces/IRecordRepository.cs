@@ -15,5 +15,6 @@ namespace MusicDB.Data.Repositories.Interfaces
 
         Task<(IReadOnlyList<BriefRecord> Items, int TotalCount)> GetRecordsByYearAsync(
             int year, string? artistName, int page, int pageSize);
+        Task<(IReadOnlyList<SingleTrackAlbum> items, int TotalCount)> GetSingleTrackAlbumsAsync(int page, int pageSize);
     }
 }
