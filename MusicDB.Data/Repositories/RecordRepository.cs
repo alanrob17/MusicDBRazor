@@ -59,6 +59,9 @@ namespace MusicDB.Data.Repositories
 
         public async Task<(IReadOnlyList<SingleTrackAlbum> items, int TotalCount)> GetSingleTrackAlbumsAsync(int page, int pageSize)
         {
+            // Increase command timeout to 120 seconds for this heavy operation
+            _context.Database.SetCommandTimeout(120);
+
             var all = await _context.Database
                         .SqlQuery<SingleTrackAlbum>($"EXEC adm_GetAlbumsWithOneTrack")
                         .ToListAsync();
@@ -73,5 +76,21 @@ namespace MusicDB.Data.Repositories
 
             return (items, totalCount);
         }
+        //public async Task<(IReadOnlyList<SingleTrackAlbum> items, int TotalCount)> GetSingleTrackAlbumsAsync(int page, int pageSize)
+        //{
+        //    var all = await _context.Database
+        //                .SqlQuery<SingleTrackAlbum>($"EXEC adm_GetAlbumsWithOneTrack")
+        //                .ToListAsync();
+
+        //    int totalCount = all.Count;
+
+        //    var items = all
+        //        .Skip((page - 1) * pageSize)
+        //        .Take(pageSize)
+        //        .ToList()
+        //        .AsReadOnly();
+
+        //    return (items, totalCount);
+        //}
     }
 }
